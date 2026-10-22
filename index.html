@@ -11,7 +11,7 @@
 <meta name="theme-color" content="#7a1526">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Pinyon+Script&family=Jost:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Pinyon+Script&family=Jost:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
     --bordeaux: #8a1a2b;
@@ -73,7 +73,11 @@
   }
   .bouquet.gauche { left: -18px; }
   .bouquet.droite { right: -18px; transform: scaleX(-1); animation-name: balance-d; transform-origin: 50% 60%; }
-  @media (max-width: 640px) { .bouquet { opacity: .85; } .bouquet.gauche { left: -34px; } .bouquet.droite { right: -34px; } }
+  @media (max-width: 640px) {
+    .bouquet { opacity: .85; } .bouquet.gauche { left: -34px; } .bouquet.droite { right: -34px; }
+    /* Le contenu prend toute la largeur : la branche passerait derrière le texte */
+    .date-section .bouquet, .programme .bouquet, #presence .bouquet { display: none; }
+  }
   @keyframes balance { from { rotate: -1.5deg; } to { rotate: 2deg; } }
   @keyframes balance-d { from { rotate: 1.5deg; } to { rotate: -2deg; } }
 
@@ -93,7 +97,7 @@
 
   /* Cadre des prénoms (image si présente, sinon double filet) */
   .cadre-noms {
-    position: relative; width: min(440px, 88vw, 64svh); aspect-ratio: 783 / 1159; margin: 0 auto;
+    position: relative; width: min(440px, 100%, 64svh); aspect-ratio: 783 / 1159; margin: 0 auto;
     display: grid; place-items: center; text-align: center;
     container-type: inline-size; /* le texte suit la largeur de l'arche */
   }
@@ -115,7 +119,8 @@
   .ouverture .bouton { font-size: 2.6cqi; padding: 3.2cqi 5cqi; letter-spacing: .16em; }
   .lettre { display: inline-block; opacity: 0; transform: translateY(.4em); filter: blur(6px); }
   .vu .lettre, .ouverture .lettre { animation: lettre .9s cubic-bezier(.2,.7,.2,1) forwards; animation-delay: calc(var(--l) * 70ms + var(--base, 0ms)); }
-  @keyframes lettre { to { opacity: 1; transform: none; filter: blur(0); } }
+  /* filter: none (et non blur(0)) : sinon le texte reste rendu comme une image, donc flou */
+  @keyframes lettre { to { opacity: 1; transform: none; filter: none; } }
 
   .bouton {
     display: inline-flex; align-items: center; justify-content: center; gap: 10px;
@@ -180,7 +185,7 @@
 
   /* Faire-part */
   .faire-part .grille { display: grid; gap: 44px; align-items: center; }
-  .faire-part .photo { position: relative; max-width: 380px; width: 100%; margin: 0 auto; }
+  .faire-part .photo { position: relative; max-width: 380px; width: calc(100% - 24px); margin: 0 auto; }
   .faire-part .photo img.portrait { aspect-ratio: 4/5; object-fit: cover; width: 100%; border-radius: 190px 190px 6px 6px; }
   .faire-part .photo::after {
     content: ""; position: absolute; inset: -11px; border: 1px solid var(--or); opacity: .6;
@@ -193,21 +198,20 @@
 
   /* Date */
   .date-bloc { display: flex; align-items: center; justify-content: center; gap: clamp(14px, 5vw, 34px); color: var(--bordeaux); }
-  .date-bloc .cote { font-family: var(--serif); text-transform: uppercase; letter-spacing: .14em; font-size: clamp(.95rem, 3.6vw, 1.15rem); }
+  .date-bloc .cote { font-family: var(--serif); text-transform: uppercase; letter-spacing: clamp(.04em, .9vw, .14em); font-size: clamp(.78rem, 4vw, 1.15rem); }
   .date-bloc .barre { width: 1px; height: 54px; background: var(--bordeaux-clair); opacity: .5; }
   .date-bloc .jour { font-family: var(--affiche); font-size: clamp(3rem, 14vw, 4.6rem); line-height: 1; }
   .annee { text-align: center; font-family: var(--affiche); color: var(--bordeaux); font-size: 1.7rem; letter-spacing: .2em; margin-top: 8px; }
 
-  .compteur { display: flex; justify-content: center; gap: clamp(8px, 3vw, 18px); margin: 40px 0 8px; }
+  .compteur { display: flex; justify-content: center; gap: clamp(6px, 2.4vw, 18px); margin: 40px 0 8px; }
   .compteur > div {
-    width: clamp(70px, 20vw, 104px); padding: 16px 4px 12px; text-align: center;
-    background: rgba(255,255,255,.7); border: 1px solid var(--trait); border-radius: 6px;
-    backdrop-filter: blur(3px);
+    flex: 1 1 0; min-width: 0; max-width: 112px; padding: 16px 2px 12px; text-align: center;
+    background: rgba(255,255,255,.82); border: 1px solid var(--trait); border-radius: 6px;
   }
   .compteur span { display: block; font-family: var(--affiche); color: var(--bordeaux); font-size: clamp(1.7rem, 7vw, 2.6rem); line-height: 1; font-variant-numeric: tabular-nums; }
   .compteur span.tic { animation: tic .5s ease; }
   @keyframes tic { from { transform: translateY(-6px); opacity: .3; } to { transform: none; opacity: 1; } }
-  .compteur small { font-family: var(--sans); font-size: .7rem; letter-spacing: .2em; text-transform: uppercase; color: var(--texte-doux); }
+  .compteur small { display: block; font-family: var(--sans); font-size: clamp(.5rem, 2.4vw, .7rem); letter-spacing: clamp(0em, .4vw, .18em); text-transform: uppercase; color: var(--texte-doux); }
 
   /* Calendrier */
   .calendrier {
@@ -277,9 +281,9 @@
   .etape .quoi .carte-lien:hover { color: var(--bordeaux); border-color: var(--bordeaux); }
   @media (max-width: 520px) {
     .programme .liste { --medaillon: 62px; }
-    .etape { grid-template-columns: var(--medaillon) 58px 1px 1fr; gap: 11px; margin-bottom: 46px; }
+    .etape { grid-template-columns: var(--medaillon) auto 1px 1fr; gap: 10px; margin-bottom: 46px; }
     .etape:not(:last-child)::after { bottom: -26px; }
-    .etape .heure { font-size: 1.02rem; }
+    .etape .heure { font-size: .95rem; letter-spacing: 0; white-space: nowrap; }
     .etape .quoi strong { font-size: .98rem; }
     .etape .quoi .texte { font-size: 1.08rem; }
   }
@@ -354,8 +358,8 @@
   .formulaire .coin { width: 70px; }
   .champ { margin-bottom: 20px; position: relative; }
   .champ label, .champ legend {
-    display: block; font-family: var(--sans); font-size: .7rem; letter-spacing: .2em; text-transform: uppercase;
-    color: var(--texte-doux); margin-bottom: 8px;
+    display: block; font-family: var(--sans); font-size: .7rem; letter-spacing: clamp(.08em, .6vw, .2em); text-transform: uppercase;
+    color: var(--texte-doux); margin-bottom: 8px; overflow-wrap: anywhere;
   }
   .champ input[type=text], .champ select, .champ textarea {
     width: 100%; font: inherit; color: var(--texte); background: var(--creme);
@@ -396,7 +400,7 @@
   footer .haut .conteneur { z-index: 2; }
   footer .merci-titre { font-family: var(--script); color: var(--bordeaux); font-size: clamp(3.2rem, 13vw, 4.6rem); line-height: 1; margin-top: 18px; }
   footer .merci { font-style: italic; color: var(--texte-doux); margin: 8px auto 30px; max-width: 420px; }
-  footer .noms-f { font-family: var(--affiche); color: var(--bordeaux); text-transform: uppercase; letter-spacing: .12em; font-size: clamp(1.2rem, 4.6vw, 1.6rem); }
+  footer .noms-f { font-family: var(--affiche); color: var(--bordeaux); text-transform: uppercase; letter-spacing: clamp(.04em, .9vw, .12em); font-size: clamp(.95rem, 5vw, 1.6rem); }
   footer .noms-f .et { font-family: var(--script); text-transform: none; letter-spacing: 0; font-size: 1.5em; margin: 0 .2em; }
   footer .date { font-family: var(--affiche); color: var(--bordeaux-clair); font-size: .82rem; letter-spacing: .35em; margin-top: 6px; }
   footer nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 22px; margin-top: 30px; }
@@ -646,8 +650,8 @@
           </select>
         </div>
         <div class="champ">
-          <label for="p-message">Un mot pour les mariés (facultatif)</label>
-          <textarea id="p-message" name="message" maxlength="500"></textarea>
+          <label for="p-message">Un mot pour les mariés</label>
+          <textarea id="p-message" name="message" maxlength="500" placeholder="Facultatif"></textarea>
         </div>
         <button class="bouton envoyer" type="submit">Envoyer ma réponse</button>
         <p class="retour" id="retour-presence" role="status"></p>
