@@ -21,8 +21,8 @@
     --blanc: #ffffff;
     --creme: #fbf6f1;
     --rose-pale: #f5e9e6;
-    --texte: #33101a;
-    --texte-doux: #5c3a41;
+    --texte: #2a0a12;
+    --texte-doux: #45232b;
     --trait: rgba(138, 26, 43, .2);
     --affiche: "Bodoni Moda", "Didot", Georgia, serif;
     --serif: "Cormorant Garamond", Georgia, serif;
@@ -30,12 +30,14 @@
     --sans: "Jost", system-ui, sans-serif;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
+  /* Taille de base relevée : tous les textes en rem grandissent ensemble */
+  html { scroll-behavior: smooth; font-size: 112.5%; }
   body {
     background: var(--creme);
     color: var(--texte);
     font-family: var(--serif);
     font-size: 1.15rem;
+    font-weight: 500; /* le Cormorant en 400 est trop fin pour rester net sur le fond */
     line-height: 1.65;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
@@ -205,7 +207,7 @@
   .compteur span { display: block; font-family: var(--affiche); color: var(--bordeaux); font-size: clamp(1.7rem, 7vw, 2.6rem); line-height: 1; font-variant-numeric: tabular-nums; }
   .compteur span.tic { animation: tic .5s ease; }
   @keyframes tic { from { transform: translateY(-6px); opacity: .3; } to { transform: none; opacity: 1; } }
-  .compteur small { font-family: var(--sans); font-size: .64rem; letter-spacing: .2em; text-transform: uppercase; color: var(--texte-doux); }
+  .compteur small { font-family: var(--sans); font-size: .7rem; letter-spacing: .2em; text-transform: uppercase; color: var(--texte-doux); }
 
   /* Calendrier */
   .calendrier {
@@ -405,7 +407,7 @@
     font-family: var(--sans); font-size: .72rem; letter-spacing: .25em; text-transform: uppercase;
     border-top: 3px double var(--or);
   }
-  footer .signature-site { margin-top: 12px; font-family: var(--serif); font-size: .95rem; letter-spacing: .04em; text-transform: none; font-style: italic; color: rgba(255,255,255,.65); }
+  footer .signature-site { margin-top: 12px; font-family: var(--serif); font-size: .95rem; letter-spacing: .04em; text-transform: none; font-style: italic; color: rgba(255,255,255,.82); }
   footer .signature-site a { color: #e8cf9f; text-decoration: none; border-bottom: 1px solid rgba(232,207,159,.5); font-style: normal; }
   footer .signature-site a:hover { color: var(--blanc); border-color: var(--blanc); }
 
@@ -569,7 +571,7 @@
   <section id="lieu">
     <div class="conteneur">
       <div class="separateur apparait" data-anim="fleur"><img src="ornements/separateur.png" alt="" onerror="this.parentElement.classList.add('secours'); this.outerHTML='<svg width=&quot;100%&quot; height=&quot;18&quot;><use href=&quot;#frise&quot;/></svg>'"></div>
-      <p class="titre apparait">Le lieu</p>
+      <p class="titre apparait">Lieu de réception</p>
       <p class="sous-titre apparait">Où nous retrouver</p>
       <div class="lieu-carte apparait">
         <img src="img/lieu.jpg" alt="Salle de réception décorée de fleurs blanches" loading="lazy">
