@@ -29,6 +29,15 @@ function doPost(e) {
     if (!nom || !categorie || !telephone) return reponse({ ok: false, erreur: "champs manquants" });
     const presence = d.presence === "oui" ? "oui" : "non";
 
+    // Le site renvoie la même réponse, avec le même identifiant, si le premier envoi n'a pas abouti
+    // chez l'invité alors que Google l'avait peut-être déjà reçu : on ne l'enregistre qu'une fois.
+    if (d.id) {
+      const cache = CacheService.getScriptCache();
+      const cle = "envoi-" + String(d.id).slice(0, 64);
+      if (cache.get(cle)) return reponse({ ok: true });
+      cache.put(cle, "1", 1800);
+    }
+
     // Pas de verrou : appendRow ajoute la ligne d'un bloc, même si deux invités répondent en même temps.
     // L'ancien verrou faisait échouer un envoi quand le précédent était lent.
     onglet(ONGLET_PRESENCES, ["Date", "Nom", "Téléphone", "Présence", "Catégorie", "Message", "Lien d'invitation"])

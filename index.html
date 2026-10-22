@@ -1121,7 +1121,7 @@
     // après un délai dépassé, le serveur a peut-être déjà enregistré, on ne renvoie pas en double.
     for (let essai = 1; ; essai++) {
       const ctrl = new AbortController();
-      const minuteur = setTimeout(() => ctrl.abort(), 40000);
+      const minuteur = setTimeout(() => ctrl.abort(), 60000); // un démarrage à froid de Google peut dépasser 30 s
       try {
         // text/plain évite la requête préalable CORS, que Google Apps Script ne gère pas
         const rep = await fetch(REGLAGES.urlScript, { method: "POST", body: JSON.stringify(donnees), headers: { "Content-Type": "text/plain;charset=utf-8" }, signal: ctrl.signal });
@@ -1194,7 +1194,9 @@
     if (!estCI() && (telephone.length < 6 || telephone.length > 14)) return "Merci d'indiquer un numéro de téléphone valide.";
     if (!presence) return "Merci d'indiquer si vous serez présent·e.";
     if (!categorie) return "Merci d'indiquer si vous êtes de la famille, un ami ou un collègue.";
-    return { type: "presence", nom, indicatif: f.indicatif.value, telephone, presence, categorie, message: f.message.value.trim(), invite: invite || "" };
+    // id : le script ignore un second envoi de la même réponse (nouvel essai après une coupure)
+    const id = crypto.randomUUID ? crypto.randomUUID() : Date.now() + "-" + Math.random().toString(36).slice(2);
+    return { type: "presence", id, nom, indicatif: f.indicatif.value, telephone, presence, categorie, message: f.message.value.trim(), invite: invite || "" };
   }, (f, retour, d) => {
     retour.textContent = d.presence === "oui"
       ? "Merci ! Nous avons hâte de vous voir le 1er janvier."
