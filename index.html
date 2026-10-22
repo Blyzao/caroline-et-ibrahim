@@ -372,6 +372,9 @@
     font-family: var(--sans); font-size: .72rem; letter-spacing: .25em; text-transform: uppercase;
     border-top: 3px double var(--or);
   }
+  footer .signature-site { margin-top: 12px; font-family: var(--serif); font-size: .95rem; letter-spacing: .04em; text-transform: none; font-style: italic; color: rgba(255,255,255,.65); }
+  footer .signature-site a { color: #e8cf9f; text-decoration: none; border-bottom: 1px solid rgba(232,207,159,.5); font-style: normal; }
+  footer .signature-site a:hover { color: var(--blanc); border-color: var(--blanc); }
 
   .musique {
     position: fixed; right: 16px; bottom: 16px; z-index: 40;
@@ -633,7 +636,10 @@
       </nav>
     </div>
   </div>
-  <p class="bandeau">#CarolineEtIbrahim</p>
+  <div class="bandeau">
+    <p>#CarolineEtIbrahim</p>
+    <p class="signature-site">Site réalisé par <a href="https://github.com/Blyzao" target="_blank" rel="noopener">Blyzao</a></p>
+  </div>
 </footer>
 
 <button class="musique cache" id="musique" type="button" aria-label="Mettre la musique en pause" aria-pressed="true">
