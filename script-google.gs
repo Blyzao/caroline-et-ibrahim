@@ -22,14 +22,15 @@ function doPost(e) {
     if (d.type !== "presence") return reponse({ ok: false, erreur: "type inconnu" });
     const nom = propre(d.nom, 80);
     const categorie = CATEGORIES[d.categorie];
-    if (!nom || !categorie) return reponse({ ok: false, erreur: "champs manquants" });
+    const telephone = numero(d.indicatif, d.telephone);
+    if (!nom || !categorie || !telephone) return reponse({ ok: false, erreur: "champs manquants" });
     const presence = d.presence === "oui" ? "oui" : "non";
 
     const verrou = LockService.getScriptLock();
     verrou.waitLock(10000);
     try {
-      onglet(ONGLET_PRESENCES, ["Date", "Nom", "Présence", "Catégorie", "Message", "Lien d'invitation"])
-        .appendRow([new Date(), nom, presence, categorie, propre(d.message, 500), propre(d.invite, 60)]);
+      onglet(ONGLET_PRESENCES, ["Date", "Nom", "Téléphone", "Présence", "Catégorie", "Message", "Lien d'invitation"])
+        .appendRow([new Date(), nom, telephone, presence, categorie, propre(d.message, 500), propre(d.invite, 60)]);
     } finally {
       verrou.releaseLock();
     }
@@ -48,6 +49,16 @@ function onglet(nom, entetes) {
     f.setFrozenRows(1);
   }
   return f;
+}
+
+// « +225 0700000000 » : 10 chiffres pour la Côte d'Ivoire, de 6 à 14 ailleurs ; null si invalide.
+// L'apostrophe initiale garde le numéro en texte dans la feuille (sinon le « + » lancerait une formule).
+function numero(indicatif, tel) {
+  const ind = String(indicatif || "");
+  const chiffres = String(tel || "").replace(/\D/g, "");
+  if (!/^\+\d{1,4}$/.test(ind)) return null;
+  const valide = ind === "+225" ? chiffres.length === 10 : chiffres.length >= 6 && chiffres.length <= 14;
+  return valide ? "'" + ind + " " + chiffres : null;
 }
 
 // Coupe à la bonne longueur et neutralise les formules (=, +, -, @) qu'un invité taperait

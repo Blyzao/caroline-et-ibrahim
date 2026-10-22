@@ -12,7 +12,7 @@ Site d'une seule page : `index.html`. Les images web sont dans `img/` ; les orig
 4. Autorisez l'accès quand Google le demande, puis copiez l'**URL de l'application Web** (elle finit par `/exec`).
 5. Dans `index.html`, collez-la dans `REGLAGES.urlScript`.
 
-Les réponses arrivent dans l'onglet **Présences**, créé automatiquement : nom, oui ou non,
+Les réponses arrivent dans l'onglet **Présences**, créé automatiquement : nom, téléphone avec indicatif, oui ou non,
 catégorie (famille, ami·e ou collègue de l'un ou l'autre), message et lien d'invitation.
 Pour compter par catégorie : **Données → Tableau croisé dynamique**, lignes « Catégorie », valeurs « Présence ».
 

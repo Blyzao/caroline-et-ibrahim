@@ -371,6 +371,13 @@
   }
   .champ select:invalid { color: var(--texte-doux); }
   .champ select:focus { outline: 2px solid var(--bordeaux-clair); outline-offset: 1px; border-color: transparent; }
+  .champ input[type=tel] { width: 100%; font: inherit; color: var(--texte); background: var(--creme); border: 1px solid var(--trait); border-radius: 4px; padding: 12px 14px; letter-spacing: .06em; }
+  .champ input[type=tel]:focus { outline: 2px solid var(--bordeaux-clair); outline-offset: 1px; border-color: transparent; }
+  .telephone { display: grid; grid-template-columns: minmax(0, 9.5em) minmax(0, 1fr); gap: 8px; }
+  /* Liste fermée : l'indicatif seul reste lisible même sur un écran étroit */
+  .telephone select { text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
+  /* Sur téléphone, l'indicatif passe au-dessus pour laisser au numéro toute la largeur */
+  @media (max-width: 420px) { .telephone { grid-template-columns: minmax(0, 1fr); } }
   .champ textarea { min-height: 110px; resize: vertical; }
   .champ input:focus, .champ textarea:focus { outline: 2px solid var(--bordeaux-clair); outline-offset: 1px; border-color: transparent; }
   fieldset.champ { border: 0; }
@@ -629,6 +636,31 @@
         <div class="champ">
           <label for="p-nom">Nom et prénom</label>
           <input type="text" id="p-nom" name="nom" maxlength="80" autocomplete="name" required>
+        </div>
+        <div class="champ">
+          <label for="p-telephone">Téléphone</label>
+          <div class="telephone">
+            <select id="p-indicatif" name="indicatif" aria-label="Indicatif du pays">
+              <option value="+225" selected>+225 Côte d'Ivoire</option>
+              <option value="+226">+226 Burkina Faso</option>
+              <option value="+223">+223 Mali</option>
+              <option value="+224">+224 Guinée</option>
+              <option value="+221">+221 Sénégal</option>
+              <option value="+233">+233 Ghana</option>
+              <option value="+228">+228 Togo</option>
+              <option value="+229">+229 Bénin</option>
+              <option value="+227">+227 Niger</option>
+              <option value="+237">+237 Cameroun</option>
+              <option value="+234">+234 Nigeria</option>
+              <option value="+212">+212 Maroc</option>
+              <option value="+33">+33 France</option>
+              <option value="+32">+32 Belgique</option>
+              <option value="+41">+41 Suisse</option>
+              <option value="+44">+44 Royaume-Uni</option>
+              <option value="+1">+1 États-Unis / Canada</option>
+            </select>
+            <input type="tel" id="p-telephone" name="telephone" inputmode="numeric" autocomplete="tel-national" maxlength="10" placeholder="07 00 00 00 00" required>
+          </div>
         </div>
         <fieldset class="champ">
           <legend>Serez-vous des nôtres ?</legend>
@@ -1107,14 +1139,31 @@
   }
 
   // Confirmation de présence
+  // Téléphone : 10 chiffres pour la Côte d'Ivoire, de 6 à 14 ailleurs ; seuls les chiffres sont gardés.
+  const champIndicatif = document.getElementById("p-indicatif");
+  const champTel = document.getElementById("p-telephone");
+  const estCI = () => champIndicatif.value === "+225";
+  function ajusterTel() {
+    const max = estCI() ? 10 : 14;
+    champTel.maxLength = max;
+    champTel.placeholder = estCI() ? "07 00 00 00 00" : "Numéro sans l'indicatif";
+    champTel.value = champTel.value.replace(/\D/g, "").slice(0, max);
+  }
+  champIndicatif.addEventListener("change", ajusterTel);
+  champTel.addEventListener("input", ajusterTel);
+  ajusterTel();
+
   brancher("form-presence", "retour-presence", f => {
     const nom = f.nom.value.trim();
     const presence = f.presence.value;
     const categorie = f.categorie.value;
+    const telephone = f.telephone.value.replace(/\D/g, "");
     if (!nom) return "Merci d'indiquer votre nom.";
+    if (estCI() && telephone.length !== 10) return "Le numéro ivoirien doit compter 10 chiffres.";
+    if (!estCI() && (telephone.length < 6 || telephone.length > 14)) return "Merci d'indiquer un numéro de téléphone valide.";
     if (!presence) return "Merci d'indiquer si vous serez présent·e.";
     if (!categorie) return "Merci d'indiquer si vous êtes de la famille, un ami ou un collègue.";
-    return { type: "presence", nom, presence, categorie, message: f.message.value.trim(), invite: invite || "" };
+    return { type: "presence", nom, indicatif: f.indicatif.value, telephone, presence, categorie, message: f.message.value.trim(), invite: invite || "" };
   }, (f, retour, d) => {
     retour.textContent = d.presence === "oui"
       ? "Merci ! Nous avons hâte de vous voir le 1er janvier."
