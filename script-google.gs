@@ -9,6 +9,9 @@
 
 const ONGLET_PRESENCES = "Présences";
 
+// Lisible à l'adresse du script suivie de ?reveil=1 : permet de vérifier quelle version est déployée.
+const VERSION = "3-anti-doublon";
+
 // Mêmes valeurs que la liste « Vous êtes » du formulaire
 const CATEGORIES = {
   "famille-caroline": "Famille de Caroline",
@@ -50,7 +53,7 @@ function doPost(e) {
 
 // Appelé par le site quand l'invité approche du formulaire : réveille le script pour que l'envoi soit rapide.
 function doGet() {
-  return reponse({ ok: true });
+  return reponse({ ok: true, version: VERSION });
 }
 
 function onglet(nom, entetes) {
