@@ -233,21 +233,54 @@
   .ajout-agenda a { color: var(--bordeaux); font-style: italic; font-size: 1.1rem; text-decoration: none; border-bottom: 1px solid currentColor; padding-bottom: 1px; }
 
   /* Programme */
-  .programme .liste { position: relative; max-width: 560px; margin: 0 auto; }
-  .programme .liste::before { content: ""; position: absolute; left: 50%; top: 8px; bottom: 8px; width: 1px; background: linear-gradient(var(--or), var(--bordeaux-clair), var(--or)); opacity: .55; }
-  .etape { position: relative; display: grid; grid-template-columns: 1fr 44px 1fr; align-items: center; margin-bottom: 34px; }
-  .etape:last-child { margin-bottom: 0; }
-  .etape .heure { text-align: right; font-family: var(--affiche); color: var(--bordeaux); font-size: clamp(1.5rem, 6vw, 2.1rem); line-height: 1.1; }
-  .etape .heure.a-preciser { font-family: var(--serif); font-style: italic; font-size: 1rem; color: var(--texte-doux); }
-  .etape .point { justify-self: center; width: 14px; height: 14px; border-radius: 50%; background: var(--creme); border: 2px solid var(--bordeaux); box-shadow: 0 0 0 5px var(--creme); }
-  .etape .quoi { text-align: left; }
-  .etape .quoi strong { display: block; font-weight: 500; text-transform: uppercase; letter-spacing: .1em; color: var(--bordeaux); font-size: 1rem; }
-  .etape .quoi .itineraire {
-    display: inline-block; margin-top: 2px; color: var(--texte-doux); font-size: 1.02rem; line-height: 1.4;
-    font-style: italic; text-decoration: none; border-bottom: 1px solid var(--trait);
+  .programme .liste { position: relative; max-width: 540px; margin: 0 auto; --medaillon: 84px; }
+  /* Fil vertical qui relie les médaillons */
+  .programme .liste::before {
+    content: ""; position: absolute; left: calc(var(--medaillon) / 2); top: calc(var(--medaillon) / 2); bottom: calc(var(--medaillon) / 2);
+    width: 1px; background: var(--or); opacity: .7;
   }
-  .etape .quoi .itineraire::after { content: " ↗"; font-style: normal; font-size: .85em; color: var(--bordeaux-clair); }
-  .etape .quoi .itineraire:hover { color: var(--bordeaux); border-color: var(--bordeaux); }
+  .etape {
+    position: relative; display: grid; align-items: center; gap: 18px;
+    grid-template-columns: var(--medaillon) 78px 1px 1fr; margin-bottom: 58px;
+  }
+  .etape:last-child { margin-bottom: 0; }
+  /* Point doré entre deux étapes */
+  .etape:not(:last-child)::after {
+    content: ""; position: absolute; left: calc(var(--medaillon) / 2 - 3.5px); bottom: -32px;
+    width: 7px; height: 7px; border-radius: 50%; background: var(--or);
+  }
+  .etape .medaillon {
+    position: relative; z-index: 1; width: var(--medaillon); height: var(--medaillon); border-radius: 50%;
+    display: grid; place-items: center; color: var(--bordeaux);
+    background: var(--creme); border: 1.5px solid var(--bordeaux);
+    box-shadow: 0 0 0 5px var(--creme), 0 0 0 6px rgba(184, 146, 90, .55);
+    transition: transform .4s ease, background .4s ease, color .4s ease;
+  }
+  .etape:hover .medaillon { transform: scale(1.06); background: var(--bordeaux); color: var(--creme); }
+  .etape .medaillon svg { width: 56%; height: 56%; }
+  .etape .heure { font-family: var(--affiche); color: #a07535; font-size: 1.3rem; text-transform: uppercase; letter-spacing: .02em; text-align: center; }
+  .etape .heure.a-preciser { font-family: var(--serif); font-style: italic; font-size: .95rem; text-transform: none; color: var(--texte-doux); }
+  .etape .filet { align-self: stretch; background: var(--or); opacity: .6; margin: 6px 0; }
+  .etape .quoi strong {
+    display: block; font-family: var(--affiche); font-weight: 500; text-transform: uppercase; letter-spacing: .09em;
+    color: var(--texte); font-size: 1.12rem; line-height: 1.2;
+  }
+  .etape .quoi .texte { display: block; font-style: italic; color: var(--texte); font-size: 1.22rem; line-height: 1.3; margin-top: 4px; }
+  .etape .quoi .carte-lien {
+    display: inline-flex; align-items: center; gap: 7px; margin-top: 6px;
+    font-style: italic; font-size: 1rem; color: var(--texte-doux); text-decoration: none;
+    border-bottom: 1px solid transparent; transition: color .25s, border-color .25s;
+  }
+  .etape .quoi .carte-lien svg { width: 15px; height: 15px; color: var(--bordeaux); flex: none; }
+  .etape .quoi .carte-lien:hover { color: var(--bordeaux); border-color: var(--bordeaux); }
+  @media (max-width: 520px) {
+    .programme .liste { --medaillon: 62px; }
+    .etape { grid-template-columns: var(--medaillon) 58px 1px 1fr; gap: 11px; margin-bottom: 46px; }
+    .etape:not(:last-child)::after { bottom: -26px; }
+    .etape .heure { font-size: 1.02rem; }
+    .etape .quoi strong { font-size: .98rem; }
+    .etape .quoi .texte { font-size: 1.08rem; }
+  }
 
   /* Lieu */
   .lieu-carte { display: grid; background: rgba(255,255,255,.85); border: 1px solid var(--trait); overflow: hidden; border-radius: 6px; }
@@ -668,15 +701,15 @@
     dateMariage: "2027-01-01T09:00:00Z",
     heureFixee: true,
     lieu: "Sofitel Abidjan Hôtel Ivoire, Boulevard Hassan II, Cocody, Abidjan",
-    // Le programme : heure "" affiche « Heure à préciser » ; detail (le lieu) est facultatif
-    // et devient un lien d'itinéraire Google Maps.
+    // Le programme. icone : mairie, eglise, photo, reception, gateau ou bal.
+    // lieu devient un lien d'itinéraire Google Maps ; quartier s'affiche à côté du repère.
     programme: [
-      { heure: "09h00", titre: "Cérémonie à la mairie", detail: "Hôtel communal de Cocody" },
-      { heure: "10h30", titre: "Cérémonie à l'église", detail: "Cathédrale Jean-Paul II" },
-      { heure: "12h00", titre: "Photos et déplacement", detail: "" },
-      { heure: "13h00", titre: "Réception et déjeuner", detail: "Sofitel Abidjan Hôtel Ivoire" },
-      { heure: "15h00", titre: "Discours et découpe du gâteau", detail: "" },
-      { heure: "16h00", titre: "Ouverture du bal et danse", detail: "" }
+      { heure: "09h00", icone: "mairie", titre: "Mairie", lieu: "Hôtel communal de Cocody", quartier: "Cocody" },
+      { heure: "10h30", icone: "eglise", titre: "Église", lieu: "Cathédrale Jean-Paul II" },
+      { heure: "12h00", icone: "photo", titre: "Photos", texte: "Séance photo et déplacement" },
+      { heure: "13h00", icone: "reception", titre: "Réception", lieu: "Sofitel Abidjan Hôtel Ivoire", quartier: "Cocody, bd Hassan II", texte: "Déjeuner" },
+      { heure: "15h00", icone: "gateau", titre: "Discours", texte: "Et découpe du gâteau" },
+      { heure: "16h00", icone: "bal", titre: "Bal", texte: "Ouverture du bal et danse" }
     ],
     // Adresse du script Google (voir LISEZ-MOI.md). Vide : les formulaires disent qu'ils ne sont pas encore reliés.
     urlScript: ""
@@ -913,26 +946,40 @@
   })();
 
   // ====== Programme ======
+  const ICONES = {
+    mairie: '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M24 4v7M24 4h7l-2 2.5 2 2.5h-7"/><path d="M6 20 24 11l18 9z"/><path d="M8 20h32M9 40V22M39 40V22"/><path d="M15 24v13M21 24v13M27 24v13M33 24v13"/><path d="M5 40h38M4 44h40"/></svg>',
+    eglise: '<svg viewBox="0 0 48 48" fill="currentColor"><path d="M21 3h6v11h10v6H27v25h-6V20H11v-6h10z"/></svg>',
+    photo: '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M5 15h9l3-5h14l3 5h9v24H5z"/><circle cx="24" cy="26" r="8"/><circle cx="24" cy="26" r="3.5"/><path d="M37 20h2"/></svg>',
+    reception: '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M10 9l9 3-2 9a5 5 0 0 1-9.6-3z"/><path d="M12.2 23 9 36M5 35l8 2.5"/><path d="M38 9l-9 3 2 9a5 5 0 0 0 9.6-3z"/><path d="M35.8 23 39 36M43 35l-8 2.5"/><path d="M24 4v4M18 6l2 3M30 6l-2 3"/><path d="M9.5 15.5l7 2M38.5 15.5l-7 2" opacity=".55"/></svg>',
+    gateau: '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M24 4c-2 2.5-2 4.5 0 6 2-1.5 2-3.5 0-6z"/><path d="M24 10v4"/><path d="M15 14h18v8H15zM11 22h26v9H11zM7 31h34v10H7z"/><path d="M11 26c2.5 2 5 2 7.5 0s5-2 7.5 0 5 2 7.5 0 2.5-2 3.5-1M7 35c2.8 2 5.6 2 8.4 0s5.6-2 8.4 0 5.6 2 8.4 0 5.6-2 8.4 0"/><path d="M4 44h40"/></svg>',
+    bal: '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M18 36V10l22-5v26"/><path d="M18 17l22-5"/><ellipse cx="13" cy="36" rx="5" ry="4" fill="currentColor"/><ellipse cx="35" cy="31" rx="5" ry="4" fill="currentColor"/></svg>'
+  };
+  const REPERE = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>';
   (function programme() {
     const liste = document.getElementById("liste-programme");
+    const el = (tag, cls, txt) => { const n = document.createElement(tag); if (cls) n.className = cls; if (txt) n.textContent = txt; return n; };
     REGLAGES.programme.forEach((e, i) => {
-      const div = document.createElement("div");
-      div.className = "etape apparait"; div.dataset.anim = i % 2 ? "droite" : "gauche"; div.style.setProperty("--i", i);
-      const h = document.createElement("div");
-      h.className = "heure" + (e.heure ? "" : " a-preciser"); h.textContent = e.heure || "Heure à préciser";
-      const p = document.createElement("div"); p.className = "point";
-      const q = document.createElement("div"); q.className = "quoi";
-      const t = document.createElement("strong"); t.textContent = e.titre;
-      q.append(t);
-      if (e.detail) {
-        const dd = document.createElement("a");
-        dd.className = "itineraire";
-        dd.href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(e.detail + ", Abidjan");
-        dd.target = "_blank"; dd.rel = "noopener";
-        dd.textContent = e.detail;
-        q.append(dd);
+      const div = el("div", "etape apparait");
+      div.dataset.anim = "gauche"; div.style.setProperty("--i", i);
+      const med = el("div", "medaillon");
+      med.innerHTML = ICONES[e.icone] || ICONES.bal; // icônes fixes ci-dessus, aucune donnée d'invité
+      med.firstChild.setAttribute("aria-hidden", "true");
+      const h = el("div", "heure" + (e.heure ? "" : " a-preciser"), e.heure || "Heure à préciser");
+      const q = el("div", "quoi");
+      q.append(el("strong", "", e.titre));
+      if (e.lieu) q.append(el("span", "texte", e.lieu));
+      if (e.texte) q.append(el("span", "texte", e.texte));
+      if (e.lieu) {
+        const a = el("a", "carte-lien");
+        a.href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(e.lieu + ", Abidjan");
+        a.target = "_blank"; a.rel = "noopener";
+        a.innerHTML = REPERE;
+        a.append(el("span", "", e.quartier || "Voir l'itinéraire"));
+        a.setAttribute("aria-label", "Itinéraire vers " + e.lieu);
+        q.append(a);
       }
-      div.append(h, p, q); liste.append(div);
+      div.append(med, h, el("div", "filet"), q);
+      liste.append(div);
     });
   })();
 
