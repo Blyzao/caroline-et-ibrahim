@@ -29,18 +29,19 @@ function doPost(e) {
     if (!nom || !categorie || !telephone) return reponse({ ok: false, erreur: "champs manquants" });
     const presence = d.presence === "oui" ? "oui" : "non";
 
-    const verrou = LockService.getScriptLock();
-    verrou.waitLock(10000);
-    try {
-      onglet(ONGLET_PRESENCES, ["Date", "Nom", "Téléphone", "Présence", "Catégorie", "Message", "Lien d'invitation"])
-        .appendRow([new Date(), nom, telephone, presence, categorie, propre(d.message, 500), propre(d.invite, 60)]);
-    } finally {
-      verrou.releaseLock();
-    }
+    // Pas de verrou : appendRow ajoute la ligne d'un bloc, même si deux invités répondent en même temps.
+    // L'ancien verrou faisait échouer un envoi quand le précédent était lent.
+    onglet(ONGLET_PRESENCES, ["Date", "Nom", "Téléphone", "Présence", "Catégorie", "Message", "Lien d'invitation"])
+      .appendRow([new Date(), nom, telephone, presence, categorie, propre(d.message, 500), propre(d.invite, 60)]);
     return reponse({ ok: true });
   } catch (err) {
-    return reponse({ ok: false, erreur: "requête invalide" });
+    return reponse({ ok: false, erreur: "serveur" });
   }
+}
+
+// Appelé par le site quand l'invité approche du formulaire : réveille le script pour que l'envoi soit rapide.
+function doGet() {
+  return reponse({ ok: true });
 }
 
 function onglet(nom, entetes) {

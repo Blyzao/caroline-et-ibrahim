@@ -1103,17 +1103,46 @@
   });
 
   // ====== Envoi vers Google Sheets ======
+  // Google Apps Script s'endort sans visite : le premier envoi peut prendre 15 s.
+  // On le réveille dès que l'invité approche du formulaire, pour que l'envoi soit rapide.
+  let scriptReveille = false;
+  function reveillerScript() {
+    if (scriptReveille || !REGLAGES.urlScript) return;
+    scriptReveille = true;
+    fetch(REGLAGES.urlScript + "?reveil=1").catch(() => { /* simple réveil, le résultat est ignoré */ });
+  }
+  new IntersectionObserver((entrees, o) => {
+    if (entrees.some(e => e.isIntersecting)) { reveillerScript(); o.disconnect(); }
+  }, { rootMargin: "1200px 0px" }).observe(document.getElementById("presence"));
+
   async function envoyer(donnees) {
     if (!REGLAGES.urlScript) throw new Error("non-relie");
-    // text/plain évite la requête préalable CORS, que Google Apps Script ne gère pas
-    const rep = await fetch(REGLAGES.urlScript, { method: "POST", body: JSON.stringify(donnees), headers: { "Content-Type": "text/plain;charset=utf-8" } });
-    const json = await rep.json();
-    if (!json.ok) throw new Error(json.erreur || "refus");
+    // Une seule nouvelle tentative, et seulement si la requête n'est jamais partie (réseau coupé) :
+    // après un délai dépassé, le serveur a peut-être déjà enregistré, on ne renvoie pas en double.
+    for (let essai = 1; ; essai++) {
+      const ctrl = new AbortController();
+      const minuteur = setTimeout(() => ctrl.abort(), 40000);
+      try {
+        // text/plain évite la requête préalable CORS, que Google Apps Script ne gère pas
+        const rep = await fetch(REGLAGES.urlScript, { method: "POST", body: JSON.stringify(donnees), headers: { "Content-Type": "text/plain;charset=utf-8" }, signal: ctrl.signal });
+        const json = await rep.json();
+        if (!json.ok) throw Object.assign(new Error(json.erreur || "refus"), { refus: true });
+        return;
+      } catch (err) {
+        if (err.name === "AbortError") throw new Error("delai");
+        if (err.refus || essai >= 2) throw err;
+        await new Promise(r => setTimeout(r, 1500));
+      } finally {
+        clearTimeout(minuteur);
+      }
+    }
   }
   function messageErreur(err) {
-    return err.message === "non-relie"
-      ? "Le formulaire n'est pas encore relié : réessayez bientôt."
-      : "L'envoi a échoué. Vérifiez votre connexion et réessayez.";
+    if (err.message === "non-relie") return "Le formulaire n'est pas encore relié : réessayez bientôt.";
+    if (err.refus && err.message === "serveur") return "Un problème est survenu à l'enregistrement. Réessayez dans un instant.";
+    if (err.refus) return "Votre réponse n'a pas pu être enregistrée : vérifiez les champs, puis réessayez.";
+    if (err.message === "delai") return "Le serveur a mis trop de temps à répondre. Patientez une minute avant de réessayer : votre réponse est peut-être déjà enregistrée.";
+    return "Connexion impossible. Vérifiez votre accès à Internet, puis réessayez.";
   }
   function brancher(formId, retourId, construire, apres) {
     const form = document.getElementById(formId);
@@ -1126,6 +1155,7 @@
       const bouton = form.querySelector("button[type=submit]");
       bouton.disabled = true;
       retour.textContent = "Envoi en cours…";
+      const patience = setTimeout(() => { retour.textContent = "Enregistrement en cours, merci de patienter quelques secondes…"; }, 5000);
       try {
         await envoyer(donnees);
         apres(form, retour, donnees);
@@ -1133,6 +1163,7 @@
         retour.textContent = messageErreur(err);
         retour.classList.add("erreur");
       } finally {
+        clearTimeout(patience);
         bouton.disabled = false;
       }
     });
