@@ -1,3 +1,6 @@
+/** @OnlyCurrentDoc */
+// L'annotation ci-dessus limite l'autorisation demandée par Google à cette seule feuille.
+
 /**
  * Script Google Apps Script : reçoit les confirmations de présence et les range
  * dans la feuille Google Sheets à laquelle il est attaché.
