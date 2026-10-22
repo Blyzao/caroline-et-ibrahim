@@ -1,0 +1,4 @@
+# Originaux non publiés : seules les versions web (img/, ornements/*.png) servent au site
+images/
+ornements/originaux/
+__pycache__/

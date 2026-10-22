@@ -1,0 +1,1066 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Caroline &amp; Ibrahim — 1er janvier 2027</title>
+<meta name="description" content="Caroline et Ibrahim se disent oui le 1er janvier 2027 au Sofitel Abidjan Hôtel Ivoire.">
+<meta property="og:title" content="Caroline &amp; Ibrahim — 1er janvier 2027">
+<meta property="og:description" content="Nous nous disons oui. Confirmez votre présence.">
+<meta property="og:image" content="img/principale-large.jpg">
+<meta name="theme-color" content="#7a1526">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Pinyon+Script&family=Jost:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bordeaux: #8a1a2b;
+    --bordeaux-fonce: #5a0f1b;
+    --bordeaux-clair: #a8394b;
+    --or: #b8925a;
+    --blanc: #ffffff;
+    --creme: #fbf6f1;
+    --rose-pale: #f5e9e6;
+    --texte: #33101a;
+    --texte-doux: #5c3a41;
+    --trait: rgba(138, 26, 43, .2);
+    --affiche: "Bodoni Moda", "Didot", Georgia, serif;
+    --serif: "Cormorant Garamond", Georgia, serif;
+    --script: "Pinyon Script", cursive;
+    --sans: "Jost", system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--creme);
+    color: var(--texte);
+    font-family: var(--serif);
+    font-size: 1.15rem;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  body.ferme { overflow: hidden; }
+  img { display: block; max-width: 100%; }
+
+  /* Motif de fond très pâle, fixe */
+  .fond {
+    position: fixed; inset: 0; z-index: -1; pointer-events: none;
+    background: var(--creme) url("ornements/fond.png") center/cover no-repeat;
+  }
+  .fond::after { content: ""; position: absolute; inset: 0; background: rgba(251, 246, 241, .8); }
+
+  #petales { position: fixed; inset: 0; z-index: 20; pointer-events: none; }
+
+  /* ---------- Ornements (images de ornements/, masquées si absentes) ---------- */
+  .coin { position: absolute; width: clamp(64px, 16vw, 120px); pointer-events: none; z-index: 2; }
+  .coin.hg { top: 0; left: 0; }
+  .coin.hd { top: 0; right: 0; transform: scaleX(-1); }
+  .coin.bg { bottom: 0; left: 0; transform: scaleY(-1); }
+  .coin.bd { bottom: 0; right: 0; transform: scale(-1, -1); }
+
+  .separateur { width: min(440px, 82%); margin: 0 auto; }
+  .separateur img { width: 100%; }
+  .separateur.secours { height: 18px; color: var(--or); }
+
+  .bouquet {
+    /* La branche tient dans la marge à côté du contenu (640px au centre) et déborde un peu de l'écran */
+    position: absolute; width: clamp(96px, calc((100vw - 640px) / 2 + 70px), 300px); pointer-events: none; z-index: 1;
+    transform-origin: 0 60%;
+    animation: balance 7s ease-in-out infinite alternate;
+  }
+  .bouquet.gauche { left: -18px; }
+  .bouquet.droite { right: -18px; transform: scaleX(-1); animation-name: balance-d; transform-origin: 50% 60%; }
+  @media (max-width: 640px) { .bouquet { opacity: .85; } .bouquet.gauche { left: -34px; } .bouquet.droite { right: -34px; } }
+  @keyframes balance { from { rotate: -1.5deg; } to { rotate: 2deg; } }
+  @keyframes balance-d { from { rotate: 1.5deg; } to { rotate: -2deg; } }
+
+  /* ---------- Écran d'ouverture ---------- */
+  .ouverture {
+    position: fixed; inset: 0; z-index: 50;
+    display: grid; place-items: center; text-align: center;
+    background: var(--creme);
+    padding: 20px;
+    transition: opacity 1.1s ease, visibility 1.1s, transform 1.1s ease;
+  }
+  .ouverture.partie { opacity: 0; visibility: hidden; transform: scale(1.06); }
+  .ouverture .contenu { position: relative; z-index: 3; }
+  .ouverture .cher { font-family: var(--sans); font-size: .74rem; letter-spacing: .3em; text-transform: uppercase; color: var(--texte-doux); }
+  .ouverture .invite-nom { font-family: var(--script); font-size: 2.3rem; line-height: 1.25; color: var(--bordeaux); margin: 4px 0 20px; }
+  .ouverture .date-court { font-family: var(--affiche); letter-spacing: .3em; font-size: .9rem; color: var(--bordeaux); margin-bottom: 28px; }
+
+  /* Cadre des prénoms (image si présente, sinon double filet) */
+  .cadre-noms {
+    position: relative; width: min(440px, 88vw, 64svh); aspect-ratio: 783 / 1159; margin: 0 auto;
+    display: grid; place-items: center; text-align: center;
+    container-type: inline-size; /* le texte suit la largeur de l'arche */
+  }
+  .cadre-noms > img.cadre-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+  .cadre-noms:not(.a-image)::before,
+  .cadre-noms:not(.a-image)::after {
+    content: ""; position: absolute; border: 1px solid var(--or); border-radius: 200px 200px 6px 6px;
+  }
+  .cadre-noms:not(.a-image)::before { inset: 0; }
+  .cadre-noms:not(.a-image)::after { inset: 9px; border-color: var(--trait); }
+  .cadre-noms .contenu { width: 52%; padding-top: 6%; }
+
+  .noms-affiche { font-family: var(--affiche); font-weight: 400; color: var(--bordeaux); text-transform: uppercase; letter-spacing: .04em; line-height: 1.05; }
+  .noms-affiche .ligne { display: block; font-size: 8.4cqi; }
+  .noms-affiche .et { display: block; font-family: var(--script); text-transform: none; font-size: 12cqi; line-height: .9; margin: .12em 0 .02em; letter-spacing: 0; }
+  .ouverture .cher { font-size: 2.4cqi; }
+  .ouverture .invite-nom { font-size: 6.4cqi; margin: 0 0 6cqi; }
+  .ouverture .date-court { font-size: 3cqi; margin-bottom: 6cqi; }
+  .ouverture .bouton { font-size: 2.6cqi; padding: 3.2cqi 5cqi; letter-spacing: .16em; }
+  .lettre { display: inline-block; opacity: 0; transform: translateY(.4em); filter: blur(6px); }
+  .vu .lettre, .ouverture .lettre { animation: lettre .9s cubic-bezier(.2,.7,.2,1) forwards; animation-delay: calc(var(--l) * 70ms + var(--base, 0ms)); }
+  @keyframes lettre { to { opacity: 1; transform: none; filter: blur(0); } }
+
+  .bouton {
+    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+    font-family: var(--sans); font-size: .78rem; letter-spacing: .22em; text-transform: uppercase;
+    padding: 15px 30px; border-radius: 999px; border: 1px solid var(--bordeaux);
+    background: var(--bordeaux); color: var(--blanc); cursor: pointer; text-decoration: none;
+    transition: background .3s, color .3s, transform .3s;
+  }
+  .bouton:hover { background: var(--bordeaux-fonce); transform: translateY(-2px); }
+  .bouton.contour { background: transparent; color: var(--bordeaux); }
+  .bouton.contour:hover { background: var(--bordeaux); color: var(--blanc); }
+  .ouverture .bouton { animation: pulse 2.4s ease-in-out 2s infinite; }
+  @keyframes pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(138,26,43,.35); } 50% { box-shadow: 0 0 0 12px rgba(138,26,43,0); } }
+
+  /* ---------- Accueil photo ---------- */
+  .accueil {
+    position: relative; min-height: 100svh;
+    display: flex; flex-direction: column; justify-content: flex-end; align-items: center;
+    text-align: center; color: var(--blanc);
+    padding: 20px 20px 11svh; overflow: hidden;
+    isolation: isolate; /* garde la photo au-dessus du motif de fond fixe */
+  }
+  .accueil picture, .accueil picture img {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2;
+  }
+  .accueil picture img { object-position: 60% 40%; transform: scale(1.12); }
+  .accueil.anime picture img { animation: zoom 16s ease-out forwards; }
+  @keyframes zoom { from { transform: scale(1.12); } to { transform: scale(1); } }
+  .accueil::before {
+    content: ""; position: absolute; inset: 0; z-index: -1;
+    background: linear-gradient(to bottom, rgba(90,15,27,0) 45%, rgba(90,15,27,.55) 78%, rgba(90,15,27,.8) 100%);
+  }
+  .accueil .oui { font-family: var(--script); font-size: clamp(2.2rem, 8vw, 3.2rem); line-height: 1.1; }
+  .accueil .date { font-family: var(--affiche); font-size: clamp(.9rem, 3.4vw, 1.1rem); letter-spacing: .4em; margin-top: 10px; }
+  .accueil .bas > * { opacity: 0; transform: translateY(20px); }
+  .accueil.anime .bas > * { animation: monte 1.2s cubic-bezier(.2,.7,.2,1) forwards; }
+  .accueil.anime .bas > *:nth-child(2) { animation-delay: .35s; }
+  .accueil.anime .bas > *:nth-child(3) { animation-delay: .7s; }
+  @keyframes monte { to { opacity: 1; transform: none; } }
+  .defiler {
+    margin-top: 26px; display: inline-block; width: 1px; height: 46px; background: rgba(255,255,255,.8);
+    animation: defile 2.2s ease-in-out infinite; transform-origin: top;
+  }
+  @keyframes defile { 0% { transform: scaleY(0); } 50% { transform: scaleY(1); transform-origin: top; } 51% { transform-origin: bottom; } 100% { transform: scaleY(0); transform-origin: bottom; } }
+
+  /* ---------- Sections ---------- */
+  section { position: relative; padding: 88px 20px; overflow: hidden; }
+  .conteneur { max-width: 1000px; margin: 0 auto; position: relative; z-index: 2; }
+  .titre {
+    font-family: var(--affiche); font-weight: 500; color: var(--bordeaux); text-transform: uppercase;
+    font-size: clamp(1.5rem, 5.6vw, 2.2rem); letter-spacing: .08em; text-align: center; line-height: 1.2;
+    margin: 22px 0 10px;
+  }
+  .sous-titre { text-align: center; font-style: italic; color: var(--texte-doux); margin-bottom: 40px; }
+  .majuscules { font-family: var(--serif); text-transform: uppercase; letter-spacing: .08em; color: var(--bordeaux); }
+  .centre { text-align: center; }
+
+  /* Noms dans le cadre */
+  .noms { padding-top: 70px; }
+  .noms .bouquet { top: 8%; }
+  .noms .annonce { margin-top: 36px; text-align: center; font-size: clamp(1.05rem, 3.8vw, 1.3rem); line-height: 1.7; }
+
+  /* Faire-part */
+  .faire-part .grille { display: grid; gap: 44px; align-items: center; }
+  .faire-part .photo { position: relative; max-width: 380px; width: 100%; margin: 0 auto; }
+  .faire-part .photo img.portrait { aspect-ratio: 4/5; object-fit: cover; width: 100%; border-radius: 190px 190px 6px 6px; }
+  .faire-part .photo::after {
+    content: ""; position: absolute; inset: -11px; border: 1px solid var(--or); opacity: .6;
+    border-radius: 200px 200px 10px 10px; pointer-events: none;
+  }
+  .faire-part .texte { text-align: center; max-width: 470px; margin: 0 auto; }
+  .faire-part .texte p + p { margin-top: 1em; }
+  .faire-part .signature { font-family: var(--script); font-size: 2.3rem; color: var(--bordeaux); margin-top: 16px; }
+  @media (min-width: 820px) { .faire-part .grille { grid-template-columns: 1fr 1fr; gap: 70px; } }
+
+  /* Date */
+  .date-bloc { display: flex; align-items: center; justify-content: center; gap: clamp(14px, 5vw, 34px); color: var(--bordeaux); }
+  .date-bloc .cote { font-family: var(--serif); text-transform: uppercase; letter-spacing: .14em; font-size: clamp(.95rem, 3.6vw, 1.15rem); }
+  .date-bloc .barre { width: 1px; height: 54px; background: var(--bordeaux-clair); opacity: .5; }
+  .date-bloc .jour { font-family: var(--affiche); font-size: clamp(3rem, 14vw, 4.6rem); line-height: 1; }
+  .annee { text-align: center; font-family: var(--affiche); color: var(--bordeaux); font-size: 1.7rem; letter-spacing: .2em; margin-top: 8px; }
+
+  .compteur { display: flex; justify-content: center; gap: clamp(8px, 3vw, 18px); margin: 40px 0 8px; }
+  .compteur > div {
+    width: clamp(70px, 20vw, 104px); padding: 16px 4px 12px; text-align: center;
+    background: rgba(255,255,255,.7); border: 1px solid var(--trait); border-radius: 6px;
+    backdrop-filter: blur(3px);
+  }
+  .compteur span { display: block; font-family: var(--affiche); color: var(--bordeaux); font-size: clamp(1.7rem, 7vw, 2.6rem); line-height: 1; font-variant-numeric: tabular-nums; }
+  .compteur span.tic { animation: tic .5s ease; }
+  @keyframes tic { from { transform: translateY(-6px); opacity: .3; } to { transform: none; opacity: 1; } }
+  .compteur small { font-family: var(--sans); font-size: .64rem; letter-spacing: .2em; text-transform: uppercase; color: var(--texte-doux); }
+
+  /* Calendrier */
+  .calendrier {
+    position: relative; max-width: 480px; margin: 44px auto 0; background: rgba(255,255,255,.82);
+    border: 1px solid var(--or); padding: clamp(40px, 9vw, 60px) clamp(22px, 6vw, 48px);
+    box-shadow: 0 0 0 6px rgba(255,255,255,.6), 0 0 0 7px rgba(184,146,90,.4);
+  }
+  .calendrier h3 { font-family: var(--sans); font-weight: 500; color: var(--bordeaux); text-align: center; font-size: 1.15rem; letter-spacing: .04em; padding-bottom: 12px; border-bottom: 1px solid var(--trait); }
+  .calendrier table { width: 100%; border-collapse: collapse; font-family: var(--sans); text-align: center; table-layout: fixed; }
+  .calendrier th { font-weight: 500; font-size: .8rem; color: var(--bordeaux-clair); padding: 10px 0; border-bottom: 2px solid var(--bordeaux); }
+  .calendrier td { font-size: .9rem; color: var(--bordeaux); height: 44px; position: relative; }
+  .calendrier td.jour-j { color: var(--blanc); font-weight: 500; }
+  .calendrier td.jour-j::before {
+    content: ""; position: absolute; left: 50%; top: 50%; width: 34px; height: 34px; z-index: -1;
+    transform: translate(-50%, -48%);
+    background: var(--bordeaux);
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 21s-7.5-4.6-10-9.3C.4 8.4 2.3 4 6.3 4c2.3 0 3.9 1.3 5.7 3.4C13.8 5.3 15.4 4 17.7 4c4 0 5.9 4.4 4.3 7.7C19.5 16.4 12 21 12 21z'/%3E%3C/svg%3E") center/contain no-repeat;
+            mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 21s-7.5-4.6-10-9.3C.4 8.4 2.3 4 6.3 4c2.3 0 3.9 1.3 5.7 3.4C13.8 5.3 15.4 4 17.7 4c4 0 5.9 4.4 4.3 7.7C19.5 16.4 12 21 12 21z'/%3E%3C/svg%3E") center/contain no-repeat;
+    animation: battement 1.6s ease-in-out infinite;
+  }
+  .calendrier td.jour-j span { position: relative; }
+  .calendrier tbody { position: relative; z-index: 0; }
+  @keyframes battement { 0%, 100% { transform: translate(-50%, -48%) scale(1); } 15% { transform: translate(-50%, -48%) scale(1.15); } 30% { transform: translate(-50%, -48%) scale(1); } }
+  .ajout-agenda { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 18px; margin-top: 26px; }
+  .ajout-agenda a { color: var(--bordeaux); font-style: italic; font-size: 1.1rem; text-decoration: none; border-bottom: 1px solid currentColor; padding-bottom: 1px; }
+
+  /* Programme */
+  .programme .liste { position: relative; max-width: 560px; margin: 0 auto; }
+  .programme .liste::before { content: ""; position: absolute; left: 50%; top: 8px; bottom: 8px; width: 1px; background: linear-gradient(var(--or), var(--bordeaux-clair), var(--or)); opacity: .55; }
+  .etape { position: relative; display: grid; grid-template-columns: 1fr 44px 1fr; align-items: center; margin-bottom: 34px; }
+  .etape:last-child { margin-bottom: 0; }
+  .etape .heure { text-align: right; font-family: var(--affiche); color: var(--bordeaux); font-size: clamp(1.5rem, 6vw, 2.1rem); line-height: 1.1; }
+  .etape .heure.a-preciser { font-family: var(--serif); font-style: italic; font-size: 1rem; color: var(--texte-doux); }
+  .etape .point { justify-self: center; width: 14px; height: 14px; border-radius: 50%; background: var(--creme); border: 2px solid var(--bordeaux); box-shadow: 0 0 0 5px var(--creme); }
+  .etape .quoi { text-align: left; }
+  .etape .quoi strong { display: block; font-weight: 500; text-transform: uppercase; letter-spacing: .1em; color: var(--bordeaux); font-size: 1rem; }
+  .etape .quoi .itineraire {
+    display: inline-block; margin-top: 2px; color: var(--texte-doux); font-size: 1.02rem; line-height: 1.4;
+    font-style: italic; text-decoration: none; border-bottom: 1px solid var(--trait);
+  }
+  .etape .quoi .itineraire::after { content: " ↗"; font-style: normal; font-size: .85em; color: var(--bordeaux-clair); }
+  .etape .quoi .itineraire:hover { color: var(--bordeaux); border-color: var(--bordeaux); }
+
+  /* Lieu */
+  .lieu-carte { display: grid; background: rgba(255,255,255,.85); border: 1px solid var(--trait); overflow: hidden; border-radius: 6px; }
+  .lieu-carte img { width: 100%; height: 100%; min-height: 230px; object-fit: cover; }
+  .lieu-carte .infos { padding: 38px 26px; text-align: center; display: flex; flex-direction: column; justify-content: center; gap: 6px; }
+  .lieu-carte h3 { font-family: var(--affiche); font-weight: 400; font-size: 1.5rem; color: var(--bordeaux); line-height: 1.25; }
+  .lieu-carte .adresse { color: var(--texte-doux); margin-bottom: 18px; }
+  .lieu-carte .bouton { align-self: center; }
+  .carte { margin-top: 22px; border: 1px solid var(--trait); border-radius: 6px; overflow: hidden; height: 300px; background: var(--rose-pale); }
+  .carte iframe { width: 100%; height: 100%; border: 0; filter: grayscale(.3) sepia(.15); }
+  @media (min-width: 820px) { .lieu-carte { grid-template-columns: 1.3fr 1fr; } }
+
+  /* ---------- Galerie : carrousel 3D circulaire ---------- */
+  .carrousel {
+    position: relative; height: clamp(380px, 110vw, 560px); perspective: 1400px;
+    touch-action: pan-y; user-select: none; -webkit-user-select: none;
+  }
+  .carrousel .piste { position: absolute; inset: 0; transform-style: preserve-3d; }
+  .diapo {
+    position: absolute; left: 50%; top: 50%;
+    width: clamp(220px, 62vw, 380px); aspect-ratio: 4 / 5;
+    margin-left: calc(clamp(220px, 62vw, 380px) / -2);
+    translate: 0 -50%;
+    border-radius: 16px; overflow: hidden; cursor: pointer;
+    box-shadow: 0 20px 40px -18px rgba(74, 24, 32, .45);
+    transition: transform .8s cubic-bezier(.22,.8,.25,1), opacity .8s, filter .8s;
+    will-change: transform;
+    background: var(--rose-pale);
+  }
+  .diapo img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+  .diapo::after {
+    content: ""; position: absolute; inset: 0; background: linear-gradient(to right, rgba(251,246,241,.0), rgba(251,246,241,.0));
+    transition: background .8s;
+  }
+  .diapo.cote::after { background: rgba(251, 246, 241, .35); }
+  .carrousel .fleche {
+    position: absolute; top: 50%; translate: 0 -50%; z-index: 30;
+    width: 46px; height: 46px; border-radius: 50%; border: 0; cursor: pointer;
+    background: rgba(255,255,255,.88); color: var(--bordeaux); font-size: 1.6rem; line-height: 1;
+    box-shadow: 0 4px 16px rgba(74,24,32,.18); display: grid; place-items: center;
+    transition: transform .25s;
+  }
+  .carrousel .fleche:hover { transform: scale(1.08); }
+  .carrousel .prec { left: max(6px, calc(50% - clamp(220px, 62vw, 380px) / 2 - 64px)); }
+  .carrousel .suiv { right: max(6px, calc(50% - clamp(220px, 62vw, 380px) / 2 - 64px)); }
+  .compte-diapo { text-align: center; font-family: var(--sans); font-size: .85rem; letter-spacing: .1em; color: var(--texte-doux); margin-top: 10px; }
+  .points { display: flex; justify-content: center; gap: 8px; margin-top: 12px; }
+  .points button { width: 7px; height: 7px; border-radius: 50%; border: 0; background: var(--trait); cursor: pointer; padding: 0; transition: width .4s, background .4s; }
+  .points button.actif { width: 22px; border-radius: 4px; background: var(--bordeaux); }
+
+  .visionneuse {
+    position: fixed; inset: 0; z-index: 60; background: rgba(40, 6, 12, .94);
+    display: none; align-items: center; justify-content: center; padding: 20px;
+  }
+  .visionneuse.ouverte { display: flex; animation: fondu .35s ease; }
+  @keyframes fondu { from { opacity: 0; } }
+  .visionneuse img { max-height: 88vh; max-width: 100%; border-radius: 6px; }
+  .visionneuse button { position: absolute; background: none; border: 0; color: var(--blanc); font-size: 2.4rem; cursor: pointer; width: 52px; height: 52px; line-height: 1; }
+  .visionneuse .fermer { top: 12px; right: 12px; }
+  .visionneuse .v-prec { left: 4px; top: 50%; transform: translateY(-50%); }
+  .visionneuse .v-suiv { right: 4px; top: 50%; transform: translateY(-50%); }
+
+  /* ---------- Formulaires ---------- */
+  .formulaire {
+    position: relative; max-width: 540px; margin: 0 auto; background: rgba(255,255,255,.88);
+    border: 1px solid var(--trait); padding: 50px 24px 40px; border-radius: 6px;
+  }
+  @media (min-width: 600px) { .formulaire { padding: 56px 44px 44px; } }
+  .formulaire .coin { width: 70px; }
+  .champ { margin-bottom: 20px; position: relative; }
+  .champ label, .champ legend {
+    display: block; font-family: var(--sans); font-size: .7rem; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--texte-doux); margin-bottom: 8px;
+  }
+  .champ input[type=text], .champ select, .champ textarea {
+    width: 100%; font: inherit; color: var(--texte); background: var(--creme);
+    border: 1px solid var(--trait); border-radius: 4px; padding: 12px 14px;
+  }
+  .champ select {
+    appearance: none; cursor: pointer; padding-right: 40px;
+    background: var(--creme) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238a1a2b' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") right 14px center/16px no-repeat;
+  }
+  .champ select:invalid { color: var(--texte-doux); }
+  .champ select:focus { outline: 2px solid var(--bordeaux-clair); outline-offset: 1px; border-color: transparent; }
+  .champ textarea { min-height: 110px; resize: vertical; }
+  .champ input:focus, .champ textarea:focus { outline: 2px solid var(--bordeaux-clair); outline-offset: 1px; border-color: transparent; }
+  fieldset.champ { border: 0; }
+  .choix { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .choix label {
+    display: flex; align-items: center; justify-content: center; text-align: center;
+    border: 1px solid var(--trait); border-radius: 4px; padding: 12px 8px; cursor: pointer;
+    font-family: var(--serif); font-size: 1.05rem; text-transform: none; letter-spacing: 0; color: var(--texte); margin: 0;
+    transition: background .25s, color .25s, border-color .25s;
+  }
+  .choix input { position: absolute; opacity: 0; pointer-events: none; }
+  .choix input:checked + label { background: var(--bordeaux); border-color: var(--bordeaux); color: var(--blanc); }
+  .choix input:focus-visible + label { outline: 2px solid var(--bordeaux-clair); outline-offset: 2px; }
+  .formulaire .envoyer { width: 100%; margin-top: 6px; }
+  .formulaire .envoyer:disabled { opacity: .6; cursor: wait; transform: none; }
+  .retour { margin-top: 16px; text-align: center; font-style: italic; min-height: 1.6em; }
+  .retour.erreur { color: #a3122a; }
+  .cache { display: none !important; }
+
+
+  footer { position: relative; overflow: hidden; text-align: center; }
+  footer .haut {
+    position: relative; padding: 70px 20px 64px;
+    background: linear-gradient(to bottom, transparent, rgba(245, 233, 230, .9) 30%);
+  }
+  footer .haut .bouquet { bottom: -6px; top: auto; }
+  footer .haut .conteneur { z-index: 2; }
+  footer .merci-titre { font-family: var(--script); color: var(--bordeaux); font-size: clamp(3.2rem, 13vw, 4.6rem); line-height: 1; margin-top: 18px; }
+  footer .merci { font-style: italic; color: var(--texte-doux); margin: 8px auto 30px; max-width: 420px; }
+  footer .noms-f { font-family: var(--affiche); color: var(--bordeaux); text-transform: uppercase; letter-spacing: .12em; font-size: clamp(1.2rem, 4.6vw, 1.6rem); }
+  footer .noms-f .et { font-family: var(--script); text-transform: none; letter-spacing: 0; font-size: 1.5em; margin: 0 .2em; }
+  footer .date { font-family: var(--affiche); color: var(--bordeaux-clair); font-size: .82rem; letter-spacing: .35em; margin-top: 6px; }
+  footer nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 22px; margin-top: 30px; }
+  footer nav a { font-family: var(--sans); font-size: .7rem; letter-spacing: .22em; text-transform: uppercase; color: var(--texte-doux); text-decoration: none; }
+  footer nav a:hover { color: var(--bordeaux); }
+  footer .bandeau {
+    background: var(--bordeaux-fonce); color: rgba(255,255,255,.8); padding: 18px 20px 84px;
+    font-family: var(--sans); font-size: .72rem; letter-spacing: .25em; text-transform: uppercase;
+    border-top: 3px double var(--or);
+  }
+
+  .musique {
+    position: fixed; right: 16px; bottom: 16px; z-index: 40;
+    width: 50px; height: 50px; border-radius: 50%; border: 0; cursor: pointer;
+    background: var(--bordeaux); color: var(--blanc); box-shadow: 0 6px 20px rgba(90,15,27,.35);
+    display: grid; place-items: center;
+  }
+  .musique svg { width: 22px; height: 22px; }
+  .musique.joue svg { animation: tourne 6s linear infinite; }
+  .defilement {
+    position: fixed; right: 16px; bottom: 76px; z-index: 40;
+    width: 50px; height: 50px; border-radius: 50%; cursor: pointer;
+    background: rgba(255,255,255,.92); color: var(--bordeaux); border: 1px solid var(--trait);
+    box-shadow: 0 6px 20px rgba(90,15,27,.18); display: grid; place-items: center;
+  }
+  .defilement svg { width: 20px; height: 20px; }
+  .defilement .icone-pause { display: none; }
+  .defilement.actif .icone-pause { display: block; }
+  .defilement.actif .icone-lecture { display: none; }
+  .defilement.actif::before {
+    content: ""; position: absolute; inset: -4px; border-radius: 50%;
+    border: 2px solid transparent; border-top-color: var(--bordeaux); animation: tourne 1.6s linear infinite;
+  }
+  #confettis { position: fixed; inset: 0; z-index: 55; pointer-events: none; }
+  .musique:not(.joue)::after { content: ""; position: absolute; width: 26px; height: 2px; background: var(--blanc); rotate: -45deg; border-radius: 2px; }
+  @keyframes tourne { to { transform: rotate(360deg); } }
+
+  /* ---------- Apparitions au défilement ---------- */
+  .apparait { opacity: 0; transition: opacity 1.1s ease, transform 1.1s cubic-bezier(.2,.7,.2,1), filter 1.1s ease; transition-delay: calc(var(--i, 0) * 120ms); }
+  .apparait, .apparait[data-anim="haut"] { transform: translateY(36px); }
+  .apparait[data-anim="zoom"] { transform: scale(.88); filter: blur(4px); }
+  .apparait[data-anim="gauche"] { transform: translateX(-50px); }
+  .apparait[data-anim="droite"] { transform: translateX(50px); }
+  .apparait[data-anim="fleur"] { transform: scale(.6) rotate(-8deg); }
+  .apparait.vu { opacity: 1; transform: none; filter: none; }
+  .bouquet.apparait.vu.droite { transform: scaleX(-1); }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    .apparait, .lettre, .accueil .bas > * { opacity: 1 !important; filter: none !important; }
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body class="ferme">
+<div class="fond" aria-hidden="true"></div>
+<canvas id="petales" aria-hidden="true"></canvas>
+
+<!-- Frise de secours, utilisée si ornements/separateur.png est absent -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="frise" viewBox="0 0 240 18">
+    <path d="M0 9 H96 M144 9 H240" stroke="currentColor" stroke-width=".7"/>
+    <path d="M120 1 C114 6 114 12 120 17 C126 12 126 6 120 1Z" fill="currentColor"/>
+    <circle cx="104" cy="9" r="2" fill="currentColor"/><circle cx="136" cy="9" r="2" fill="currentColor"/>
+  </symbol>
+</svg>
+
+<!-- Écran d'ouverture : le clic lance aussi la musique, que les navigateurs bloquent sans geste de l'invité -->
+<div class="ouverture" id="ouverture">
+  <div class="cadre-noms">
+    <img class="cadre-img" src="ornements/cadre.png" alt="" onload="this.parentElement.classList.add('a-image')" onerror="this.remove()">
+    <div class="contenu">
+      <p class="cher" id="cher">Vous êtes invité·e</p>
+      <p class="invite-nom" id="invite-nom">au mariage de</p>
+      <h1 class="noms-affiche"><span class="ligne" data-lettres>Caroline</span><span class="et">&amp;</span><span class="ligne" data-lettres style="--base: 600ms">Ibrahim</span></h1>
+      <p class="date-court" style="margin-top:18px">01 · 01 · 2027</p>
+      <button class="bouton" id="ouvrir" type="button">Ouvrir l'invitation</button>
+    </div>
+  </div>
+</div>
+
+<header class="accueil" id="accueil">
+  <picture>
+    <source media="(min-width: 820px) and (orientation: landscape)" srcset="img/principale-large.jpg">
+    <img src="img/principale.jpg" alt="Caroline et Ibrahim dans un jardin de roses">
+  </picture>
+  <div class="bas">
+    <p class="oui">Nous nous disons oui</p>
+    <p class="date">01 · 01 · 2027</p>
+    <a href="#noms" class="defiler" aria-label="Descendre"></a>
+  </div>
+</header>
+
+<main>
+  <section class="noms" id="noms">
+    <img class="bouquet gauche apparait" data-anim="gauche" src="ornements/bouquet.png" alt="" onerror="this.remove()">
+    <img class="bouquet droite apparait" data-anim="droite" src="ornements/bouquet.png" alt="" style="top:42%" onerror="this.remove()">
+    <div class="conteneur">
+      <div class="cadre-noms apparait" data-anim="zoom">
+        <img class="cadre-img" src="ornements/cadre.png" alt="" onload="this.parentElement.classList.add('a-image')" onerror="this.remove()">
+        <div class="contenu">
+          <h2 class="noms-affiche"><span class="ligne" data-lettres>Caroline</span><span class="et">&amp;</span><span class="ligne" data-lettres style="--base: 600ms">Ibrahim</span></h2>
+        </div>
+      </div>
+      <p class="annonce majuscules apparait">C'est avec une grande joie<br>que nous vous invitons à partager ce jour</p>
+    </div>
+  </section>
+
+  <section class="faire-part" id="faire-part">
+    <div class="conteneur">
+      <div class="separateur apparait" data-anim="fleur"><img src="ornements/separateur.png" alt="" onerror="this.parentElement.classList.add('secours'); this.outerHTML='<svg width=&quot;100%&quot; height=&quot;18&quot;><use href=&quot;#frise&quot;/></svg>'"></div>
+      <p class="titre apparait">Faire-part</p>
+      <div class="grille" style="margin-top:34px">
+        <div class="photo apparait" data-anim="gauche"><img class="portrait" src="img/photo-2.jpg" alt="Caroline et Ibrahim main dans la main" loading="lazy"></div>
+        <div class="texte apparait" data-anim="droite">
+          <p>Entourés de l'amour de leurs familles, Caroline et Ibrahim ont la joie de vous annoncer leur mariage.</p>
+          <p>Ils seraient profondément heureux de partager avec vous ce premier jour de l'année, et le premier de leur vie à deux.</p>
+          <p class="signature">Caroline &amp; Ibrahim</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="date-section" id="date">
+    <img class="bouquet gauche apparait" data-anim="gauche" src="ornements/bouquet.png" alt="" style="top:36%" onerror="this.remove()">
+    <div class="conteneur">
+      <div class="separateur apparait" data-anim="fleur"><img src="ornements/separateur.png" alt="" onerror="this.parentElement.classList.add('secours'); this.outerHTML='<svg width=&quot;100%&quot; height=&quot;18&quot;><use href=&quot;#frise&quot;/></svg>'"></div>
+      <p class="titre apparait">Le grand jour</p>
+      <div class="date-bloc apparait" data-anim="zoom" style="margin-top:30px">
+        <span class="cote">Vendredi</span><span class="barre"></span><span class="jour">01</span><span class="barre"></span><span class="cote">Janvier</span>
+      </div>
+      <p class="annee apparait">2027</p>
+
+      <div class="compteur apparait" id="compteur">
+        <div style="--i:0"><span id="c-jours">–</span><small>Jours</small></div>
+        <div style="--i:1"><span id="c-heures">–</span><small>Heures</small></div>
+        <div style="--i:2"><span id="c-minutes">–</span><small>Minutes</small></div>
+        <div style="--i:3"><span id="c-secondes">–</span><small>Secondes</small></div>
+      </div>
+
+      <div class="calendrier apparait" data-anim="zoom">
+        <img class="coin hg" src="ornements/coin.png" alt="" onerror="this.remove()">
+        <img class="coin hd" src="ornements/coin.png" alt="" onerror="this.remove()">
+        <img class="coin bg" src="ornements/coin.png" alt="" onerror="this.remove()">
+        <img class="coin bd" src="ornements/coin.png" alt="" onerror="this.remove()">
+        <h3>Janvier 2027</h3>
+        <table>
+          <thead><tr><th>Lu</th><th>Ma</th><th>Me</th><th>Je</th><th>Ve</th><th>Sa</th><th>Di</th></tr></thead>
+          <tbody id="jours-cal"></tbody>
+        </table>
+      </div>
+      <div class="ajout-agenda apparait">
+        <a id="agenda-google" href="#" target="_blank" rel="noopener">Ajouter à Google Agenda</a>
+        <a id="agenda-ics" href="#" download="mariage-caroline-ibrahim.ics">Ajouter au calendrier du téléphone</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="programme" id="programme">
+    <img class="bouquet droite apparait" data-anim="droite" src="ornements/bouquet.png" alt="" style="top:50%" onerror="this.remove()">
+    <div class="conteneur">
+      <div class="separateur apparait" data-anim="fleur"><img src="ornements/separateur.png" alt="" onerror="this.parentElement.classList.add('secours'); this.outerHTML='<svg width=&quot;100%&quot; height=&quot;18&quot;><use href=&quot;#frise&quot;/></svg>'"></div>
+      <p class="titre apparait">Programme</p>
+      <p class="sous-titre apparait">Vendredi 1<sup>er</sup> janvier 2027</p>
+      <div class="liste" id="liste-programme"></div>
+    </div>
+  </section>
+
+  <section id="lieu">
+    <div class="conteneur">
+      <div class="separateur apparait" data-anim="fleur"><img src="ornements/separateur.png" alt="" onerror="this.parentElement.classList.add('secours'); this.outerHTML='<svg width=&quot;100%&quot; height=&quot;18&quot;><use href=&quot;#frise&quot;/></svg>'"></div>
+      <p class="titre apparait">Le lieu</p>
+      <p class="sous-titre apparait">Où nous retrouver</p>
+      <div class="lieu-carte apparait">
+        <img src="img/lieu.jpg" alt="Salle de réception décorée de fleurs blanches" loading="lazy">
+        <div class="infos">
+          <h3>Sofitel Abidjan<br>Hôtel Ivoire</h3>
+          <p class="adresse">Boulevard Hassan II, Cocody<br>Abidjan, Côte d'Ivoire</p>
+          <a class="bouton" href="https://www.google.com/maps/search/?api=1&amp;query=Sofitel+Abidjan+H%C3%B4tel+Ivoire" target="_blank" rel="noopener">Itinéraire</a>
+        </div>
+      </div>
+      <div class="carte apparait">
+        <iframe title="Carte du Sofitel Abidjan Hôtel Ivoire" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+          src="https://www.google.com/maps?q=Sofitel+Abidjan+H%C3%B4tel+Ivoire&amp;output=embed"></iframe>
+      </div>
+    </div>
+  </section>
+
+  <section class="galerie" id="galerie">
+    <img class="bouquet gauche apparait" data-anim="gauche" src="ornements/bouquet.png" alt="" style="bottom:6%" onerror="this.remove()">
+    <div class="conteneur" style="max-width:1200px">
+      <div class="separateur apparait" data-anim="fleur"><img src="ornements/separateur.png" alt="" onerror="this.parentElement.classList.add('secours'); this.outerHTML='<svg width=&quot;100%&quot; height=&quot;18&quot;><use href=&quot;#frise&quot;/></svg>'"></div>
+      <p class="titre apparait">Galerie photo</p>
+      <div class="carrousel apparait" id="carrousel" aria-roledescription="carrousel" aria-label="Photos de Caroline et Ibrahim">
+        <div class="piste" id="piste">
+          <div class="diapo"><img src="img/galerie-04.jpg" alt="Caroline et Ibrahim front contre front" draggable="false"></div>
+          <div class="diapo"><img src="img/galerie-01.jpg" alt="Caroline, la tête sur l'épaule de Ibrahim" draggable="false"></div>
+          <div class="diapo"><img src="img/galerie-05.jpg" alt="Ibrahim fait tourner Caroline" draggable="false"></div>
+          <div class="diapo"><img src="img/galerie-02.jpg" alt="Portrait de Ibrahim" draggable="false"></div>
+          <div class="diapo"><img src="img/photo-1.jpg" alt="Leurs mains et leurs alliances" draggable="false"></div>
+          <div class="diapo"><img src="img/galerie-03.jpg" alt="Portrait de Caroline" draggable="false"></div>
+          <div class="diapo"><img src="img/galerie-06.jpg" alt="Silhouettes du couple au coucher du soleil" draggable="false"></div>
+          <div class="diapo"><img src="img/photo-3.jpg" alt="Caroline et Ibrahim riant sur un banc" draggable="false"></div>
+          <div class="diapo"><img src="img/principale.jpg" alt="Caroline et Ibrahim enlacés" draggable="false"></div>
+        </div>
+        <button class="fleche prec" type="button" aria-label="Photo précédente">‹</button>
+        <button class="fleche suiv" type="button" aria-label="Photo suivante">›</button>
+      </div>
+      <p class="compte-diapo" id="compte-diapo" aria-live="polite"></p>
+      <div class="points" id="points"></div>
+    </div>
+  </section>
+
+  <section id="presence">
+    <img class="bouquet droite apparait" data-anim="droite" src="ornements/bouquet.png" alt="" style="top:52%" onerror="this.remove()">
+    <div class="conteneur">
+      <div class="separateur apparait" data-anim="fleur"><img src="ornements/separateur.png" alt="" onerror="this.parentElement.classList.add('secours'); this.outerHTML='<svg width=&quot;100%&quot; height=&quot;18&quot;><use href=&quot;#frise&quot;/></svg>'"></div>
+      <p class="titre apparait">Confirmez votre présence</p>
+      <p class="sous-titre apparait">Merci de nous répondre au plus tôt</p>
+      <form class="formulaire apparait" id="form-presence" novalidate>
+        <img class="coin hg" src="ornements/coin.png" alt="" onerror="this.remove()">
+        <img class="coin hd" src="ornements/coin.png" alt="" onerror="this.remove()">
+        <div class="champ">
+          <label for="p-nom">Nom et prénom</label>
+          <input type="text" id="p-nom" name="nom" maxlength="80" autocomplete="name" required>
+        </div>
+        <fieldset class="champ">
+          <legend>Serez-vous des nôtres ?</legend>
+          <div class="choix">
+            <input type="radio" id="p-oui" name="presence" value="oui" required><label for="p-oui">Avec joie</label>
+            <input type="radio" id="p-non" name="presence" value="non"><label for="p-non">À regret, non</label>
+          </div>
+        </fieldset>
+        <div class="champ">
+          <label for="p-categorie">Vous êtes</label>
+          <select id="p-categorie" name="categorie" required>
+            <option value="" selected disabled>Choisissez…</option>
+            <option value="famille-caroline">Famille de Caroline</option>
+            <option value="famille-ibrahim">Famille d'Ibrahim</option>
+            <option value="ami-caroline">Ami·e de Caroline</option>
+            <option value="ami-ibrahim">Ami·e d'Ibrahim</option>
+            <option value="collegue">Collègue</option>
+            <option value="autre">Autre</option>
+          </select>
+        </div>
+        <div class="champ">
+          <label for="p-message">Un mot pour les mariés (facultatif)</label>
+          <textarea id="p-message" name="message" maxlength="500"></textarea>
+        </div>
+        <button class="bouton envoyer" type="submit">Envoyer ma réponse</button>
+        <p class="retour" id="retour-presence" role="status"></p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="haut">
+    <img class="bouquet gauche apparait" data-anim="gauche" src="ornements/bouquet.png" alt="" onerror="this.remove()">
+    <img class="bouquet droite apparait" data-anim="droite" src="ornements/bouquet.png" alt="" onerror="this.remove()">
+    <div class="conteneur">
+      <div class="separateur apparait" data-anim="fleur"><img src="ornements/separateur.png" alt="" onerror="this.parentElement.classList.add('secours'); this.outerHTML='<svg width=&quot;100%&quot; height=&quot;18&quot;><use href=&quot;#frise&quot;/></svg>'"></div>
+      <p class="merci-titre apparait" data-anim="zoom">Merci</p>
+      <p class="merci apparait">de faire partie de notre histoire. Votre présence est notre plus beau cadeau.</p>
+      <p class="noms-f apparait">Caroline<span class="et">&amp;</span>Ibrahim</p>
+      <p class="date apparait">01 · 01 · 2027 — ABIDJAN</p>
+      <nav class="apparait" aria-label="Sections">
+        <a href="#programme">Programme</a><a href="#lieu">Lieu</a><a href="#galerie">Galerie</a><a href="#presence">Présence</a>
+      </nav>
+    </div>
+  </div>
+  <p class="bandeau">#CarolineEtIbrahim</p>
+</footer>
+
+<button class="musique cache" id="musique" type="button" aria-label="Mettre la musique en pause" aria-pressed="true">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/>
+  </svg>
+</button>
+<audio id="audio" src="musique/musique.mp3" loop preload="none"></audio>
+<button class="defilement cache" id="defilement" type="button" aria-label="Arrêter le défilement automatique" aria-pressed="true">
+  <svg class="icone-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+  <svg class="icone-lecture" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
+</button>
+<canvas id="confettis" aria-hidden="true"></canvas>
+
+<div class="visionneuse" id="visionneuse" role="dialog" aria-modal="true" aria-label="Photo agrandie">
+  <button class="fermer" type="button" aria-label="Fermer">×</button>
+  <button class="v-prec" type="button" aria-label="Photo précédente">‹</button>
+  <img alt="">
+  <button class="v-suiv" type="button" aria-label="Photo suivante">›</button>
+</div>
+
+<script>
+  // ====== Réglages ======
+  const REGLAGES = {
+    // Abidjan est à UTC+0. Quand l'heure est fixée, ex. "2027-01-01T15:00:00Z" (le calendrier passe alors en événement horaire).
+    dateMariage: "2027-01-01T09:00:00Z",
+    heureFixee: true,
+    lieu: "Sofitel Abidjan Hôtel Ivoire, Boulevard Hassan II, Cocody, Abidjan",
+    // Le programme : heure "" affiche « Heure à préciser » ; detail (le lieu) est facultatif
+    // et devient un lien d'itinéraire Google Maps.
+    programme: [
+      { heure: "09h00", titre: "Cérémonie à la mairie", detail: "Hôtel communal de Cocody" },
+      { heure: "10h30", titre: "Cérémonie à l'église", detail: "Cathédrale Jean-Paul II" },
+      { heure: "12h00", titre: "Photos et déplacement", detail: "" },
+      { heure: "13h00", titre: "Réception et déjeuner", detail: "Sofitel Abidjan Hôtel Ivoire" },
+      { heure: "15h00", titre: "Discours et découpe du gâteau", detail: "" },
+      { heure: "16h00", titre: "Ouverture du bal et danse", detail: "" }
+    ],
+    // Adresse du script Google (voir LISEZ-MOI.md). Vide : les formulaires disent qu'ils ne sont pas encore reliés.
+    urlScript: ""
+  };
+  const reduit = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // ====== Lettres animées des prénoms ======
+  document.querySelectorAll("[data-lettres]").forEach(el => {
+    const mot = el.textContent;
+    el.setAttribute("aria-label", mot);
+    el.textContent = "";
+    [...mot].forEach((c, i) => {
+      const s = document.createElement("span");
+      s.className = "lettre"; s.style.setProperty("--l", i); s.textContent = c; s.setAttribute("aria-hidden", "true");
+      el.append(s);
+    });
+  });
+
+  // ====== Ouverture et invité personnalisé (?invite=Famille-Kouassi) ======
+  const invite = new URLSearchParams(location.search).get("invite");
+  if (invite) {
+    const nom = invite.replace(/[-_]+/g, " ").trim().slice(0, 60);
+    document.getElementById("cher").textContent = "Cher·e";
+    document.getElementById("invite-nom").textContent = nom;
+    document.getElementById("p-nom").value = nom;
+  }
+
+  const audio = document.getElementById("audio");
+  const btnMusique = document.getElementById("musique");
+  document.getElementById("ouvrir").addEventListener("click", () => {
+    document.getElementById("ouverture").classList.add("partie");
+    document.body.classList.remove("ferme");
+    document.getElementById("accueil").classList.add("anime");
+    lancerConfettis();
+    lancerPetales();
+    setTimeout(demarrerDefilement, 3500);
+    audio.play().then(() => btnMusique.classList.remove("cache")).catch(() => { /* pas de fichier : bouton caché */ });
+  });
+  function majMusique() {
+    const joue = !audio.paused;
+    btnMusique.classList.toggle("joue", joue);
+    btnMusique.setAttribute("aria-pressed", String(joue));
+    btnMusique.setAttribute("aria-label", joue ? "Mettre la musique en pause" : "Lancer la musique");
+  }
+  btnMusique.addEventListener("click", () => { audio.paused ? audio.play() : audio.pause(); });
+  audio.addEventListener("play", majMusique);
+  audio.addEventListener("pause", majMusique);
+
+  // ====== Explosion de confettis à l'ouverture ======
+  function lancerConfettis() {
+    if (reduit) return;
+    const cv = document.getElementById("confettis"), ctx = cv.getContext("2d");
+    const r = devicePixelRatio || 1, l = innerWidth, h = innerHeight;
+    cv.width = l * r; cv.height = h * r; ctx.setTransform(r, 0, 0, r, 0, 0);
+    const couleurs = ["#8a1a2b", "#a8394b", "#b8925a", "#d9b77e", "#f6e7c8", "#ffffff", "#c9707c"];
+    const formes = ["rect", "rect", "rond", "coeur", "ruban"];
+    const parts = [];
+    // Une gerbe au centre, puis deux canons dans les coins bas
+    const gerbe = (x, y, nb, angle, ecart, force) => {
+      for (let i = 0; i < nb; i++) {
+        const a = angle + (Math.random() - .5) * ecart, v = force * (.45 + Math.random() * .75);
+        parts.push({
+          x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, t: 5 + Math.random() * 7,
+          rot: Math.random() * 6.28, vr: (Math.random() - .5) * .3, inc: Math.random() * 6.28,
+          c: couleurs[Math.floor(Math.random() * couleurs.length)], f: formes[Math.floor(Math.random() * formes.length)], vie: 1
+        });
+      }
+    };
+    const force = Math.min(l, h) / 38;
+    gerbe(l / 2, h * .45, l < 600 ? 110 : 170, -Math.PI / 2, Math.PI * 2, force);
+    setTimeout(() => { gerbe(0, h, 70, -Math.PI / 3, .7, force * 1.25); gerbe(l, h, 70, -Math.PI * 2 / 3, .7, force * 1.25); }, 350);
+    const coeur = (t) => {
+      ctx.beginPath(); ctx.moveTo(0, t * .35);
+      ctx.bezierCurveTo(-t, -t * .3, -t * .45, -t, 0, -t * .45);
+      ctx.bezierCurveTo(t * .45, -t, t, -t * .3, 0, t * .35); ctx.fill();
+    };
+    const debut = performance.now();
+    (function dessiner(maintenant) {
+      ctx.clearRect(0, 0, l, h);
+      const fin = maintenant - debut > 1500;
+      for (const p of parts) {
+        p.vx *= .985; p.vy = p.vy * .985 + .16; p.x += p.vx; p.y += p.vy; p.rot += p.vr; p.inc += .12;
+        if (fin) p.vie -= .006;
+        if (p.vie <= 0 || p.y > h + 30) continue;
+        ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.rot); ctx.scale(1, Math.cos(p.inc));
+        ctx.globalAlpha = Math.max(0, p.vie); ctx.fillStyle = p.c;
+        if (p.f === "rect") ctx.fillRect(-p.t / 2, -p.t / 4, p.t, p.t / 2);
+        else if (p.f === "rond") { ctx.beginPath(); ctx.arc(0, 0, p.t / 3, 0, 6.28); ctx.fill(); }
+        else if (p.f === "coeur") coeur(p.t * .8);
+        else ctx.fillRect(-p.t, -1, p.t * 2, 2.4);
+        ctx.restore();
+      }
+      if (parts.some(p => p.vie > 0 && p.y <= h + 30)) requestAnimationFrame(dessiner);
+      else ctx.clearRect(0, 0, l, h);
+    })(debut);
+  }
+
+  // ====== Défilement automatique ======
+  // Il s'arrête dès que l'invité touche, fait défiler ou tape au clavier, et reprend après 8 s d'inactivité.
+  // Le bouton l'arrête pour de bon, ou le relance.
+  const btnDefil = document.getElementById("defilement");
+  const defil = { voulu: true, enPause: false, minuteur: null, reste: 0, avant: 0 };
+  const VITESSE = innerWidth < 600 ? 34 : 46; // pixels par seconde
+  function majBoutonDefil() {
+    const roule = defil.voulu && !defil.enPause;
+    btnDefil.classList.toggle("actif", roule);
+    btnDefil.setAttribute("aria-pressed", String(defil.voulu));
+    btnDefil.setAttribute("aria-label", defil.voulu ? "Arrêter le défilement automatique" : "Lancer le défilement automatique");
+  }
+  function demarrerDefilement() {
+    btnDefil.classList.remove("cache");
+    if (reduit) { defil.voulu = false; majBoutonDefil(); return; }
+    majBoutonDefil();
+    defil.avant = performance.now();
+    requestAnimationFrame(function pas(maintenant) {
+      const dt = Math.min(.1, (maintenant - defil.avant) / 1000);
+      defil.avant = maintenant;
+      const bloque = !defil.voulu || defil.enPause || vis.classList.contains("ouverte") || document.hidden;
+      if (!bloque) {
+        defil.reste += VITESSE * dt;
+        const px = Math.floor(defil.reste);
+        if (px >= 1) {
+          defil.reste -= px;
+          const max = document.documentElement.scrollHeight - innerHeight;
+          if (scrollY >= max - 1) { defil.voulu = false; majBoutonDefil(); }
+          else window.scrollTo({ top: Math.min(max, scrollY + px), behavior: "instant" });
+        }
+      }
+      requestAnimationFrame(pas);
+    });
+  }
+  function interaction() {
+    if (!defil.voulu || btnDefil.classList.contains("cache")) return;
+    defil.enPause = true; majBoutonDefil();
+    clearTimeout(defil.minuteur);
+    defil.minuteur = setTimeout(() => {
+      // Pas de reprise pendant la saisie d'un formulaire
+      if (document.activeElement?.matches("input, textarea")) return interaction();
+      defil.enPause = false; majBoutonDefil();
+    }, 8000);
+  }
+  ["wheel", "touchstart", "touchmove", "pointerdown", "keydown"].forEach(ev =>
+    addEventListener(ev, e => { if (!e.target.closest?.("#defilement, #musique")) interaction(); }, { passive: true }));
+  document.addEventListener("focusin", interaction);
+  btnDefil.addEventListener("click", () => {
+    defil.voulu = !defil.voulu; defil.enPause = false; clearTimeout(defil.minuteur);
+    if (defil.voulu && scrollY >= document.documentElement.scrollHeight - innerHeight - 1) window.scrollTo({ top: 0, behavior: "instant" });
+    majBoutonDefil();
+  });
+
+  // ====== Pétales qui tombent ======
+  function lancerPetales() {
+    if (reduit) return;
+    const cv = document.getElementById("petales"), ctx = cv.getContext("2d");
+    const couleurs = ["#8a1a2b", "#a8394b", "#c9707c", "#f1d9d6"];
+    let l, h;
+    const taille = () => { const r = devicePixelRatio || 1; l = innerWidth; h = innerHeight; cv.width = l * r; cv.height = h * r; ctx.setTransform(r, 0, 0, r, 0, 0); };
+    taille(); addEventListener("resize", taille);
+    const nouveau = (haut) => ({ x: Math.random() * l, y: haut ? -20 : Math.random() * h, t: 6 + Math.random() * 7, vy: .35 + Math.random() * .6, vx: -.3 + Math.random() * .6, a: Math.random() * 6.28, va: -.02 + Math.random() * .04, o: Math.random() * 6.28, c: couleurs[Math.floor(Math.random() * couleurs.length)] });
+    const petales = Array.from({ length: innerWidth < 600 ? 12 : 20 }, () => nouveau(false));
+    (function dessiner() {
+      ctx.clearRect(0, 0, l, h);
+      for (const p of petales) {
+        p.o += .02; p.y += p.vy; p.x += p.vx + Math.sin(p.o) * .5; p.a += p.va;
+        if (p.y > h + 20) Object.assign(p, nouveau(true));
+        ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.a); ctx.scale(1, .55 + Math.sin(p.o) * .25);
+        ctx.globalAlpha = .55; ctx.fillStyle = p.c;
+        ctx.beginPath(); ctx.moveTo(0, -p.t); ctx.quadraticCurveTo(p.t, 0, 0, p.t); ctx.quadraticCurveTo(-p.t, 0, 0, -p.t); ctx.fill();
+        ctx.restore();
+      }
+      requestAnimationFrame(dessiner);
+    })();
+  }
+
+  // ====== Compte à rebours ======
+  const cible = new Date(REGLAGES.dateMariage).getTime();
+  const champs = ["jours", "heures", "minutes", "secondes"].map(id => document.getElementById("c-" + id));
+  function tic() {
+    const s = Math.floor(Math.max(0, cible - Date.now()) / 1000);
+    const valeurs = [Math.floor(s / 86400), Math.floor(s / 3600) % 24, Math.floor(s / 60) % 60, s % 60];
+    valeurs.forEach((v, i) => {
+      const txt = i === 0 ? String(v) : String(v).padStart(2, "0");
+      if (champs[i].textContent !== txt) {
+        champs[i].textContent = txt;
+        champs[i].classList.remove("tic"); void champs[i].offsetWidth; champs[i].classList.add("tic");
+      }
+    });
+    if (s === 0) clearInterval(minuteur);
+  }
+  const minuteur = setInterval(tic, 1000);
+  tic();
+
+  // ====== Calendrier de janvier 2027 ======
+  (function calendrier() {
+    const d = new Date(REGLAGES.dateMariage);
+    const an = d.getUTCFullYear(), mois = d.getUTCMonth(), jourJ = d.getUTCDate();
+    const decalage = (new Date(Date.UTC(an, mois, 1)).getUTCDay() + 6) % 7; // lundi en premier
+    const nbJours = new Date(Date.UTC(an, mois + 1, 0)).getUTCDate();
+    const corps = document.getElementById("jours-cal");
+    let tr = document.createElement("tr");
+    for (let i = 0; i < decalage; i++) tr.append(document.createElement("td"));
+    for (let j = 1; j <= nbJours; j++) {
+      const td = document.createElement("td");
+      const s = document.createElement("span"); s.textContent = j; td.append(s);
+      if (j === jourJ) { td.className = "jour-j"; td.setAttribute("aria-label", j + " janvier, le jour du mariage"); }
+      tr.append(td);
+      if (tr.children.length === 7) { corps.append(tr); tr = document.createElement("tr"); }
+    }
+    if (tr.children.length) corps.append(tr);
+  })();
+
+  // ====== Ajout à l'agenda ======
+  (function agenda() {
+    const titre = "Mariage de Caroline & Ibrahim";
+    const debut = new Date(REGLAGES.dateMariage);
+    const fmtJour = dt => dt.toISOString().slice(0, 10).replace(/-/g, "");
+    const fmtHeure = dt => dt.toISOString().replace(/[-:]/g, "").slice(0, 15) + "Z";
+    let dates, icsDates;
+    if (REGLAGES.heureFixee) {
+      const fin = new Date(debut.getTime() + 11 * 3600e3); // jusqu'à 20h, le bal ouvrant à 16h
+      dates = fmtHeure(debut) + "/" + fmtHeure(fin);
+      icsDates = "DTSTART:" + fmtHeure(debut) + "\r\nDTEND:" + fmtHeure(fin);
+    } else {
+      const lendemain = new Date(debut.getTime() + 864e5);
+      dates = fmtJour(debut) + "/" + fmtJour(lendemain);
+      icsDates = "DTSTART;VALUE=DATE:" + fmtJour(debut) + "\r\nDTEND;VALUE=DATE:" + fmtJour(lendemain);
+    }
+    document.getElementById("agenda-google").href = "https://calendar.google.com/calendar/render?action=TEMPLATE"
+      + "&text=" + encodeURIComponent(titre) + "&dates=" + dates + "&location=" + encodeURIComponent(REGLAGES.lieu);
+    const ics = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Caroline et Ibrahim//Invitation//FR", "BEGIN:VEVENT",
+      "UID:mariage-caroline-ibrahim-20270101", "DTSTAMP:" + fmtHeure(new Date()), icsDates,
+      "SUMMARY:" + titre, "LOCATION:" + REGLAGES.lieu.replace(/,/g, "\\,"), "END:VEVENT", "END:VCALENDAR"].join("\r\n");
+    document.getElementById("agenda-ics").href = URL.createObjectURL(new Blob([ics], { type: "text/calendar" }));
+  })();
+
+  // ====== Programme ======
+  (function programme() {
+    const liste = document.getElementById("liste-programme");
+    REGLAGES.programme.forEach((e, i) => {
+      const div = document.createElement("div");
+      div.className = "etape apparait"; div.dataset.anim = i % 2 ? "droite" : "gauche"; div.style.setProperty("--i", i);
+      const h = document.createElement("div");
+      h.className = "heure" + (e.heure ? "" : " a-preciser"); h.textContent = e.heure || "Heure à préciser";
+      const p = document.createElement("div"); p.className = "point";
+      const q = document.createElement("div"); q.className = "quoi";
+      const t = document.createElement("strong"); t.textContent = e.titre;
+      q.append(t);
+      if (e.detail) {
+        const dd = document.createElement("a");
+        dd.className = "itineraire";
+        dd.href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(e.detail + ", Abidjan");
+        dd.target = "_blank"; dd.rel = "noopener";
+        dd.textContent = e.detail;
+        q.append(dd);
+      }
+      div.append(h, p, q); liste.append(div);
+    });
+  })();
+
+  // ====== Apparitions au défilement ======
+  const obs = new IntersectionObserver(entrees => {
+    entrees.forEach(e => { if (e.isIntersecting) { e.target.classList.add("vu"); obs.unobserve(e.target); } });
+  }, { threshold: .12, rootMargin: "0px 0px -6% 0px" });
+  const observer = () => document.querySelectorAll(".apparait:not(.vu)").forEach(el => obs.observe(el));
+  observer();
+
+  // ====== Carrousel 3D circulaire ======
+  const diapos = [...document.querySelectorAll("#piste .diapo")];
+  const n = diapos.length;
+  let actuel = 0, auto;
+  const points = document.getElementById("points");
+  diapos.forEach((d, i) => {
+    const b = document.createElement("button");
+    b.type = "button"; b.setAttribute("aria-label", "Photo " + (i + 1));
+    b.addEventListener("click", () => { aller(i); relancer(); });
+    points.append(b);
+  });
+  function placer() {
+    const large = innerWidth >= 820;
+    diapos.forEach((d, i) => {
+      let k = i - actuel;
+      if (k > n / 2) k -= n;
+      if (k < -n / 2) k += n;
+      const a = Math.abs(k);
+      const pas = large ? 34 : 30;          // décalage horizontal en % de la largeur d'une photo
+      const x = Math.sign(k) * (a === 0 ? 0 : 52 + (a - 1) * pas);
+      const rot = -Math.sign(k) * Math.min(a, 1) * 42;
+      const echelle = a === 0 ? 1 : Math.max(.6, .86 - (a - 1) * .1);
+      d.style.transform = `translateX(${x}%) translateZ(${-a * 140}px) rotateY(${rot}deg) scale(${echelle})`;
+      d.style.zIndex = 20 - a;
+      d.style.opacity = a > 3 ? 0 : 1 - a * .12;
+      d.style.pointerEvents = a > 3 ? "none" : "auto";
+      d.classList.toggle("cote", a > 0);
+      d.setAttribute("aria-hidden", a === 0 ? "false" : "true");
+    });
+    [...points.children].forEach((b, i) => b.classList.toggle("actif", i === actuel));
+    document.getElementById("compte-diapo").textContent = (actuel + 1) + " / " + n;
+  }
+  function aller(i) { actuel = (i + n) % n; placer(); }
+  function relancer() { clearInterval(auto); if (!reduit) auto = setInterval(() => aller(actuel + 1), 4000); }
+  document.querySelector("#carrousel .prec").addEventListener("click", () => { aller(actuel - 1); relancer(); });
+  document.querySelector("#carrousel .suiv").addEventListener("click", () => { aller(actuel + 1); relancer(); });
+  diapos.forEach((d, i) => d.addEventListener("click", () => {
+    if (glisse) return;
+    if (i === actuel) ouvrirVis(i); else { aller(i); relancer(); }
+  }));
+  // Glisser au doigt ou à la souris
+  const car = document.getElementById("carrousel");
+  let x0 = null, glisse = false;
+  car.addEventListener("pointerdown", e => { if (e.target.closest(".fleche")) return; x0 = e.clientX; glisse = false; });
+  car.addEventListener("pointermove", e => { if (x0 !== null && Math.abs(e.clientX - x0) > 10) glisse = true; });
+  addEventListener("pointerup", e => {
+    if (x0 === null) return;
+    const dx = e.clientX - x0; x0 = null;
+    if (Math.abs(dx) > 40) { aller(actuel + (dx < 0 ? 1 : -1)); relancer(); }
+    setTimeout(() => { glisse = false; }, 0);
+  });
+  car.addEventListener("mouseenter", () => clearInterval(auto));
+  car.addEventListener("mouseleave", relancer);
+  addEventListener("resize", placer);
+  placer(); relancer();
+
+  // Visionneuse
+  const vis = document.getElementById("visionneuse");
+  const visImg = vis.querySelector("img");
+  let vCourant = 0;
+  function montrer(i) { vCourant = (i + n) % n; const img = diapos[vCourant].querySelector("img"); visImg.src = img.src; visImg.alt = img.alt; }
+  function ouvrirVis(i) { montrer(i); vis.classList.add("ouverte"); clearInterval(auto); vis.querySelector(".fermer").focus(); }
+  const fermerVis = () => { vis.classList.remove("ouverte"); aller(vCourant); relancer(); };
+  vis.querySelector(".fermer").addEventListener("click", fermerVis);
+  vis.querySelector(".v-prec").addEventListener("click", () => montrer(vCourant - 1));
+  vis.querySelector(".v-suiv").addEventListener("click", () => montrer(vCourant + 1));
+  vis.addEventListener("click", e => { if (e.target === vis) fermerVis(); });
+  document.addEventListener("keydown", e => {
+    if (!vis.classList.contains("ouverte")) return;
+    if (e.key === "Escape") fermerVis();
+    if (e.key === "ArrowLeft") montrer(vCourant - 1);
+    if (e.key === "ArrowRight") montrer(vCourant + 1);
+  });
+
+  // ====== Envoi vers Google Sheets ======
+  async function envoyer(donnees) {
+    if (!REGLAGES.urlScript) throw new Error("non-relie");
+    // text/plain évite la requête préalable CORS, que Google Apps Script ne gère pas
+    const rep = await fetch(REGLAGES.urlScript, { method: "POST", body: JSON.stringify(donnees), headers: { "Content-Type": "text/plain;charset=utf-8" } });
+    const json = await rep.json();
+    if (!json.ok) throw new Error(json.erreur || "refus");
+  }
+  function messageErreur(err) {
+    return err.message === "non-relie"
+      ? "Le formulaire n'est pas encore relié : réessayez bientôt."
+      : "L'envoi a échoué. Vérifiez votre connexion et réessayez.";
+  }
+  function brancher(formId, retourId, construire, apres) {
+    const form = document.getElementById(formId);
+    const retour = document.getElementById(retourId);
+    form.addEventListener("submit", async e => {
+      e.preventDefault();
+      retour.className = "retour";
+      const donnees = construire(form);
+      if (typeof donnees === "string") { retour.textContent = donnees; retour.classList.add("erreur"); return; }
+      const bouton = form.querySelector("button[type=submit]");
+      bouton.disabled = true;
+      retour.textContent = "Envoi en cours…";
+      try {
+        await envoyer(donnees);
+        apres(form, retour, donnees);
+      } catch (err) {
+        retour.textContent = messageErreur(err);
+        retour.classList.add("erreur");
+      } finally {
+        bouton.disabled = false;
+      }
+    });
+  }
+
+  // Confirmation de présence
+  brancher("form-presence", "retour-presence", f => {
+    const nom = f.nom.value.trim();
+    const presence = f.presence.value;
+    const categorie = f.categorie.value;
+    if (!nom) return "Merci d'indiquer votre nom.";
+    if (!presence) return "Merci d'indiquer si vous serez présent·e.";
+    if (!categorie) return "Merci d'indiquer si vous êtes de la famille, un ami ou un collègue.";
+    return { type: "presence", nom, presence, categorie, message: f.message.value.trim(), invite: invite || "" };
+  }, (f, retour, d) => {
+    retour.textContent = d.presence === "oui"
+      ? "Merci ! Nous avons hâte de vous voir le 1er janvier."
+      : "Merci de nous avoir prévenus, vous nous manquerez.";
+  });
+</script>
+</body>
+</html>
