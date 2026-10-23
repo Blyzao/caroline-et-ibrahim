@@ -51,6 +51,21 @@ Image 5 : un motif de fond carré 1:1, raccordable en mosaïque, de grandes ané
 dessinés en rose très pâle et beige, très peu contrastés, comme un papier peint délicat en filigrane.
 ```
 
+## Boîte cadeau animée
+
+Deux images à déposer dans `ornements/`. Le couvercle sera découpé dans la boîte fermée :
+il s'ajustera donc parfaitement au corps quand il s'envolera.
+
+**`boite.png`** (`--ar 1:1`)
+```
+A single luxurious gift box, closed, three-quarter front view from slightly above, centered. Deep burgundy box decorated with painted ivory roses, burgundy peonies, sage green leaves and fine gold filigree, in the same watercolor and gouache style as a luxury wedding invitation. The lid is a separate piece that clearly overhangs the box, with a crisp straight horizontal edge between lid and box. A large glossy burgundy satin ribbon wraps the box, with a big bow sitting entirely on top of the lid. Soft natural shadow under the box only. Isolated on a pure white background, no text, no other objects.
+```
+
+**`cadeaux-mini.png`** (`--ar 3:2`)
+```
+Six small separate gift boxes floating, well spaced apart from each other with lots of white space between them, none touching: a gold box with ivory ribbon, a white box with burgundy ribbon, a pale pink box with gold ribbon, a dark green box with gold ribbon, an ivory box with burgundy floral pattern, a burgundy box with gold ribbon. Watercolor and gouache illustration, luxury wedding invitation style, matching the large burgundy floral gift box. Isolated on a pure white background, no text, no shadow.
+```
+
 ## Si une image dérape
 
 - Fond coloré : « Refais-la avec un fond blanc pur uni. »
