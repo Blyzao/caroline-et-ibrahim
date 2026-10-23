@@ -20,7 +20,7 @@ par un petit script Google Apps Script.
 - **Lieu de réception** : photo, adresse et carte.
 - **Galerie** : un carrousel 3D circulaire, qui défile seul et s'agrandit au toucher.
 - **Boîte cadeau** : une boîte qui flotte parmi de petits paquets ; au toucher elle s'ouvre dans un éclat
-  de confettis et révèle comment participer par Wave.
+  de confettis et révèle les numéros mobile money des mariés (Wave, Orange Money, MTN, Moov), chacun avec un bouton Copier.
 - **Confirmation de présence** : nom, téléphone avec indicatif (Côte d'Ivoire par défaut),
   présence, lien avec les mariés et un mot facultatif.
 - **Ambiance** : pétales qui tombent, apparitions au défilement, et défilement automatique
@@ -55,7 +55,7 @@ Tout se règle en haut du script de `index.html`, dans l'objet `REGLAGES` :
 | `lieu` | Adresse utilisée pour l'ajout à l'agenda |
 | `programme` | Les étapes de la journée : `heure`, `icone`, `titre`, et au choix `lieu`, `quartier`, `texte` |
 | `urlScript` | Adresse du script Google qui enregistre les réponses |
-| `cadeau` | Compte Wave de la boîte cadeau : `numero`, `nomCompte` (nom que Wave affiche avant de valider), `qr` (facultatif). Vide : la carte annonce que les informations arrivent bientôt |
+| `cadeau` | Comptes mobile money de la boîte cadeau, un par ligne : `operateur` (`Wave`, `Orange Money`, `MTN MoMo`, `Moov Money`), `numero` et `nom` facultatif (le nom que l'application affiche avant de valider). Liste vide : la carte annonce que les informations arrivent bientôt |
 
 Icônes disponibles pour le programme : `mairie`, `eglise`, `photo`, `reception`, `gateau`, `bal`.
 

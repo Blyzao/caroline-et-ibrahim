@@ -525,20 +525,30 @@
   .carte-cadeau > p { max-width: 420px; margin-left: auto; margin-right: auto; }
   .merci-coeur { font-style: italic; color: var(--bordeaux); margin-top: 22px; }
   .wave { margin: 24px auto 0; max-width: 360px; }
+  .wave { max-width: 400px; }
+  .wave .compte {
+    display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 8px 12px; text-align: left;
+    padding: 14px 0; border-bottom: 1px solid var(--trait);
+  }
+  .wave .compte:first-child { border-top: 1px solid var(--trait); }
   .wave .marque {
-    display: inline-block; font-family: var(--sans); font-weight: 500; font-size: .8rem; letter-spacing: .18em; text-transform: uppercase;
-    color: #fff; background: #1dc3f5; border-radius: 999px; padding: 6px 16px; margin-bottom: 16px;
+    font-family: var(--sans); font-weight: 500; font-size: .66rem; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap;
+    color: #fff; background: var(--bordeaux); border-radius: 999px; padding: 5px 11px; text-align: center;
   }
-  .wave .qr { width: min(200px, 70%); margin: 0 auto 6px; border-radius: 8px; border: 1px solid var(--trait); background: #fff; padding: 8px; }
-  .wave .qr-legende { font-size: .95rem; color: var(--texte-doux); font-style: italic; margin-bottom: 16px; }
-  .wave .numero-ligne { display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; }
-  .wave .numero { font-family: var(--affiche); color: var(--bordeaux); font-size: clamp(1.25rem, 5.6vw, 1.6rem); letter-spacing: .04em; white-space: nowrap; }
-  .wave .copier { padding: 9px 18px; font-size: .7rem; }
-  .wave .verifier {
-    margin-top: 18px; padding: 12px 14px; border-radius: 6px; background: var(--rose-pale); font-size: 1rem; line-height: 1.45; text-align: left;
-    border-left: 3px solid var(--bordeaux);
+  .wave .marque.wave { background: #1dc3f5; }
+  .wave .marque.orange { background: #ff7900; }
+  .wave .marque.mtn { background: #ffcb05; color: #1d1d1b; }
+  .wave .marque.moov { background: #0066b3; }
+  .wave .numero { font-family: var(--affiche); color: var(--bordeaux); font-size: clamp(1.02rem, 4.6vw, 1.35rem); letter-spacing: .02em; white-space: nowrap; }
+  .wave .copier { padding: 8px 14px; font-size: .64rem; letter-spacing: .12em; }
+  .wave .titulaire { grid-column: 1 / -1; font-size: .95rem; color: var(--texte-doux); margin: 0; }
+  .wave .titulaire strong { color: var(--texte); }
+  .wave .copie-statut { min-height: 1.4em; margin-top: 12px; font-style: italic; color: var(--bordeaux); font-size: 1rem; }
+  .wave .etapes { margin: 10px auto 0; padding-left: 1.3em; text-align: left; font-size: 1rem; line-height: 1.55; max-width: 340px; }
+  @media (max-width: 380px) {
+    .wave .compte { grid-template-columns: 1fr auto; }
+    .wave .marque { grid-column: 1 / -1; justify-self: start; }
   }
-  .wave .etapes { margin: 16px auto 0; padding-left: 1.3em; text-align: left; font-size: 1rem; line-height: 1.55; max-width: 320px; }
   .wave .bientot { font-style: italic; color: var(--texte-doux); }
 
   /* ---------- Apparitions au défilement ---------- */
@@ -802,7 +812,7 @@
         <img class="coin hg" src="ornements/coin.png" alt="" onerror="this.remove()">
         <img class="coin hd" src="ornements/coin.png" alt="" onerror="this.remove()">
         <p class="cadeau-titre">Votre présence est notre plus beau cadeau.</p>
-        <p>Si vous souhaitez néanmoins nous gâter, vous pouvez participer à notre nouvelle vie à deux par Wave, du montant de votre choix.</p>
+        <p>Si vous souhaitez néanmoins nous gâter, vous pouvez participer à notre nouvelle vie à deux par mobile money, du montant de votre choix.</p>
         <div class="wave" id="wave"></div>
         <p class="merci-coeur">Merci du fond du cœur !</p>
       </div>
@@ -869,10 +879,14 @@
     ],
     // Adresse du script Google (voir README.md). Vide : les formulaires disent qu'ils ne sont pas encore reliés.
     urlScript: "https://script.google.com/macros/s/AKfycbwHM3Me9HfPFzHo56CoHs-5pv7XzS2oz4melCvySDmftI2Vs4AxD5w7CVGAtp4-8Lg1/exec",
-    // Boîte cadeau : compte Wave qui reçoit les dons. Tant que numero est vide, la carte annonce
-    // que les informations arrivent bientôt. qr : image du code QR Wave (ex. "ornements/qr-wave.png"), facultative.
-    // nomCompte : le nom que Wave affiche à l'invité avant qu'il valide, pour qu'il vérifie le destinataire.
-    cadeau: { numero: "0505512003", nomCompte: "BLY ZAO GUY ROMARIC", qr: "" }
+    // Boîte cadeau : un compte par ligne, affichés dans cet ordre. Liste vide : la carte annonce que les
+    // informations arrivent bientôt. operateur : "Wave", "Orange Money", "MTN MoMo" ou "Moov Money".
+    // nom (facultatif) : le nom que l'application affiche à l'invité avant qu'il valide, pour qu'il vérifie le destinataire.
+    cadeau: [
+      { operateur: "Wave", numero: "0505512003", nom: "BLY ZAO GUY ROMARIC" },
+      { operateur: "Orange Money", numero: "0708893943", nom: "" },
+      { operateur: "MTN MoMo", numero: "0505512003", nom: "" }
+    ]
   };
   const reduit = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -1155,41 +1169,50 @@
     const boite = document.getElementById("boite");
     const carte = document.getElementById("carte-cadeau");
     const zone = document.getElementById("wave");
-    const { numero, nomCompte, qr } = REGLAGES.cadeau;
+    const comptes = REGLAGES.cadeau.filter(c => c.numero);
     const el = (tag, cls, txt) => { const n = document.createElement(tag); if (cls) n.className = cls; if (txt) n.textContent = txt; return n; };
+    // Couleur de chaque opérateur ; un opérateur inconnu prend la couleur du site
+    const COULEURS = { "wave": "wave", "orange money": "orange", "mtn momo": "mtn", "mtn": "mtn", "moov money": "moov", "moov": "moov" };
 
     // Contenu de la carte, construit sans innerHTML : rien de ce qui est affiché n'est interprété comme du code
-    if (!numero) {
+    if (!comptes.length) {
       zone.append(el("p", "bientot", "Les informations pour participer seront bientôt disponibles."));
     } else {
-      zone.append(el("span", "marque", "Wave"));
-      if (qr) {
-        const img = el("img", "qr"); img.src = qr; img.alt = "Code QR Wave des mariés";
-        zone.append(img, el("p", "qr-legende", "Scannez ce code avec l'application Wave"));
-      }
-      const ligne = el("div", "numero-ligne");
-      const chiffres = numero.replace(/\D/g, "");
-      // « 0700000000 » s'affiche « 07 00 00 00 00 » ; l'indicatif +225 est implicite pour Wave Côte d'Ivoire
-      const lisible = chiffres.replace(/(\d{2})(?=\d)/g, "$1 ");
-      const btn = el("button", "bouton contour copier", "Copier");
-      btn.type = "button";
-      btn.setAttribute("aria-label", "Copier le numéro Wave " + lisible);
-      btn.addEventListener("click", async () => {
-        try { await navigator.clipboard.writeText(chiffres); btn.textContent = "Copié !"; }
-        catch { btn.textContent = "Copie impossible"; }
-        setTimeout(() => { btn.textContent = "Copier"; }, 2200);
+      const statut = el("p", "copie-statut"); statut.setAttribute("role", "status");
+      comptes.forEach(({ operateur, numero, nom }) => {
+        const ligne = el("div", "compte");
+        const chiffres = numero.replace(/\D/g, "");
+        // « 0700000000 » s'affiche « 07 00 00 00 00 »
+        const lisible = chiffres.replace(/(\d{2})(?=\d)/g, "$1 ");
+        const marque = el("span", "marque " + (COULEURS[operateur.toLowerCase()] || ""), operateur);
+        const num = el("span", "numero", lisible);
+        const btn = el("button", "bouton contour copier", "Copier");
+        btn.type = "button";
+        btn.setAttribute("aria-label", "Copier le numéro " + operateur + " " + lisible);
+        btn.addEventListener("click", async () => {
+          try {
+            await navigator.clipboard.writeText(chiffres);
+            btn.textContent = "Copié !";
+            statut.textContent = "Numéro " + operateur + " copié : ouvrez " + operateur + ", choisissez l'envoi ou le transfert, puis collez-le.";
+          } catch {
+            btn.textContent = "Copie impossible";
+          }
+          setTimeout(() => { btn.textContent = "Copier"; }, 2200);
+        });
+        ligne.append(marque, num, btn);
+        if (nom) {
+          const v = el("p", "titulaire", "Nom affiché à vérifier : ");
+          v.append(el("strong", "", nom));
+          ligne.append(v);
+        }
+        zone.append(ligne);
       });
-      ligne.append(el("span", "numero", lisible), btn);
-      zone.append(ligne);
+      zone.append(statut);
       const ol = el("ol", "etapes");
-      ["Ouvrez l'application Wave.", "Touchez « Envoyer » et saisissez ce numéro.", "Indiquez le montant de votre choix."]
+      ["Copiez le numéro de votre opérateur.", "Ouvrez votre application et choisissez l'envoi ou le transfert.",
+        "Collez le numéro et indiquez le montant de votre choix.", "Avant de valider, vérifiez le nom du destinataire."]
         .forEach(t => ol.append(el("li", "", t)));
       zone.append(ol);
-      if (nomCompte) {
-        const v = el("p", "verifier", "Avant de valider, vérifiez que Wave affiche bien le nom : ");
-        v.append(el("strong", "", nomCompte));
-        zone.append(v);
-      }
     }
 
     function ouvrir() {
