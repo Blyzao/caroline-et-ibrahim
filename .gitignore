@@ -2,3 +2,6 @@
 images/
 ornements/originaux/
 __pycache__/
+# Captures d'écran (QR code Wave…) : jamais publiées sans vérification
+ornements/*.jpeg
+ornements/*.jpg

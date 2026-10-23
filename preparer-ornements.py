@@ -33,7 +33,8 @@ def blanc_vers_transparent(im: Image.Image) -> Image.Image:
 def main() -> None:
     ORIGINAUX.mkdir(exist_ok=True)
     for chemin in sorted(DOSSIER.iterdir()):
-        if chemin.suffix.lower() not in {".png", ".jpg", ".jpeg", ".webp"}:
+        # Les .webp (boîte cadeau et petits paquets) sont des objets pleins, détourés par detourer-objets.py
+        if chemin.suffix.lower() not in {".png", ".jpg", ".jpeg"}:
             continue
         nom = chemin.stem
         original = ORIGINAUX / chemin.name

@@ -19,6 +19,8 @@ par un petit script Google Apps Script.
 - **Programme** : une frise à icônes, avec un lien d'itinéraire pour chaque lieu.
 - **Lieu de réception** : photo, adresse et carte.
 - **Galerie** : un carrousel 3D circulaire, qui défile seul et s'agrandit au toucher.
+- **Boîte cadeau** : une boîte qui flotte parmi de petits paquets ; au toucher elle s'ouvre dans un éclat
+  de confettis et révèle comment participer par Wave.
 - **Confirmation de présence** : nom, téléphone avec indicatif (Côte d'Ivoire par défaut),
   présence, lien avec les mariés et un mot facultatif.
 - **Ambiance** : pétales qui tombent, apparitions au défilement, et défilement automatique
@@ -53,6 +55,7 @@ Tout se règle en haut du script de `index.html`, dans l'objet `REGLAGES` :
 | `lieu` | Adresse utilisée pour l'ajout à l'agenda |
 | `programme` | Les étapes de la journée : `heure`, `icone`, `titre`, et au choix `lieu`, `quartier`, `texte` |
 | `urlScript` | Adresse du script Google qui enregistre les réponses |
+| `cadeau` | Compte Wave de la boîte cadeau : `numero`, `nomCompte` (nom que Wave affiche avant de valider), `qr` (facultatif). Vide : la carte annonce que les informations arrivent bientôt |
 
 Icônes disponibles pour le programme : `mairie`, `eglise`, `photo`, `reception`, `gateau`, `bal`.
 
@@ -95,6 +98,9 @@ Les motifs sont générés par IA avec les prompts de `PROMPTS-ORNEMENTS.md`, d�
 
 Le script, qui demande la bibliothèque Pillow, retire le fond blanc et garde les originaux dans `ornements/originaux/`.
 Tant qu'un motif manque, le site affiche un simple filet doré à sa place.
+
+La **boîte cadeau** (`boite.webp`) et les **petits paquets** (`cadeau-1.webp` à `cadeau-6.webp`) sont des objets pleins :
+ils sont détourés avec `detourer-objets.py`, qui garde opaques les parties claires de l'objet (roses ivoire).
 
 ## Travailler en local
 
