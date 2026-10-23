@@ -61,6 +61,12 @@ Icônes disponibles pour le programme : `mairie`, `eglise`, `photo`, `reception`
 
 Les prénoms, textes et photos se modifient directement dans le HTML.
 
+**Aperçu du lien (WhatsApp, Facebook).** L'image `img/apercu.jpg` se régénère avec `python generer-apercu.py`
+(textes à modifier en bas du script ; il demande Pillow et télécharge les polices au premier lancement).
+Les balises `og:*` en tête de `index.html` doivent contenir l'**adresse complète** du site : changez-les
+si le site change d'adresse. WhatsApp garde un aperçu en mémoire pour chaque lien : pour voir le nouveau,
+partagez une adresse jamais envoyée, par exemple avec `?invite=` suivi d'un autre nom.
+
 ## Relier le formulaire à Google Sheets
 
 1. Créez une feuille Google Sheets vide (**sheets.new**).
