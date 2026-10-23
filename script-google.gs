@@ -4,7 +4,7 @@
 /**
  * Script Google Apps Script : reçoit les confirmations de présence et les range
  * dans la feuille Google Sheets à laquelle il est attaché.
- * Mise en place : voir LISEZ-MOI.md.
+ * Mise en place : voir README.md.
  */
 
 const ONGLET_PRESENCES = "Présences";
