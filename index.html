@@ -373,11 +373,27 @@
   .champ select:focus { outline: 2px solid var(--bordeaux-clair); outline-offset: 1px; border-color: transparent; }
   .champ input[type=tel] { width: 100%; font: inherit; color: var(--texte); background: var(--creme); border: 1px solid var(--trait); border-radius: 4px; padding: 12px 14px; letter-spacing: .06em; }
   .champ input[type=tel]:focus { outline: 2px solid var(--bordeaux-clair); outline-offset: 1px; border-color: transparent; }
-  .telephone { display: grid; grid-template-columns: minmax(0, 9.5em) minmax(0, 1fr); gap: 8px; }
-  /* Liste fermée : l'indicatif seul reste lisible même sur un écran étroit */
-  .telephone select { text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
-  /* Sur téléphone, l'indicatif passe au-dessus pour laisser au numéro toute la largeur */
-  @media (max-width: 420px) { .telephone { grid-template-columns: minmax(0, 1fr); } }
+  .telephone { display: flex; gap: 8px; }
+  .telephone input[type=tel] { flex: 1; min-width: 0; }
+  .indicatif { position: relative; flex: none; }
+  .indicatif-bouton {
+    height: 100%; display: flex; align-items: center; gap: 6px; padding: 0 10px 0 12px; cursor: pointer;
+    background: var(--creme); border: 1px solid var(--trait); border-radius: 4px; color: var(--bordeaux);
+  }
+  .indicatif-bouton:focus-visible { outline: 2px solid var(--bordeaux-clair); outline-offset: 1px; }
+  .indicatif-bouton svg { width: 14px; height: 14px; transition: rotate .25s; }
+  .indicatif-bouton[aria-expanded="true"] svg { rotate: 180deg; }
+  .indicatif img, .indicatif-liste img { width: 28px; height: 20px; object-fit: cover; border-radius: 2px; box-shadow: 0 0 0 1px rgba(0,0,0,.12); flex: none; }
+  .indicatif-liste {
+    position: absolute; z-index: 25; top: calc(100% + 6px); left: 0; width: min(290px, 78vw); max-height: 290px; overflow-y: auto;
+    margin: 0; padding: 6px; list-style: none; background: var(--blanc);
+    border: 1px solid var(--trait); border-radius: 6px; box-shadow: 0 14px 34px rgba(74, 24, 32, .2);
+  }
+  .indicatif-liste:focus { outline: none; }
+  .indicatif-liste li { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 4px; cursor: pointer; font-size: 1rem; line-height: 1.2; }
+  .indicatif-liste li .code { margin-left: auto; font-family: var(--sans); font-size: .78rem; color: var(--texte-doux); }
+  .indicatif-liste li:hover, .indicatif-liste li.actif { background: var(--rose-pale); }
+  .indicatif-liste li[aria-selected="true"] { color: var(--bordeaux); font-weight: 600; }
   .champ textarea { min-height: 110px; resize: vertical; }
   .champ input:focus, .champ textarea:focus { outline: 2px solid var(--bordeaux-clair); outline-offset: 1px; border-color: transparent; }
   fieldset.champ { border: 0; }
@@ -640,25 +656,15 @@
         <div class="champ">
           <label for="p-telephone">Téléphone</label>
           <div class="telephone">
-            <select id="p-indicatif" name="indicatif" aria-label="Indicatif du pays">
-              <option value="+225" selected>+225 Côte d'Ivoire</option>
-              <option value="+226">+226 Burkina Faso</option>
-              <option value="+223">+223 Mali</option>
-              <option value="+224">+224 Guinée</option>
-              <option value="+221">+221 Sénégal</option>
-              <option value="+233">+233 Ghana</option>
-              <option value="+228">+228 Togo</option>
-              <option value="+229">+229 Bénin</option>
-              <option value="+227">+227 Niger</option>
-              <option value="+237">+237 Cameroun</option>
-              <option value="+234">+234 Nigeria</option>
-              <option value="+212">+212 Maroc</option>
-              <option value="+33">+33 France</option>
-              <option value="+32">+32 Belgique</option>
-              <option value="+41">+41 Suisse</option>
-              <option value="+44">+44 Royaume-Uni</option>
-              <option value="+1">+1 États-Unis / Canada</option>
-            </select>
+            <!-- Sélecteur sur mesure : le champ ne montre que le drapeau, la liste montre pays et indicatif -->
+            <div class="indicatif">
+              <button type="button" class="indicatif-bouton" id="indicatif-bouton" aria-haspopup="listbox" aria-expanded="false" aria-controls="indicatif-liste" aria-label="Indicatif : Côte d'Ivoire, +225">
+                <img src="img/drapeaux/ci.svg" alt="" width="28" height="20">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+              </button>
+              <ul class="indicatif-liste" id="indicatif-liste" role="listbox" aria-label="Indicatif du pays" tabindex="-1" hidden></ul>
+              <input type="hidden" id="p-indicatif" name="indicatif" value="+225">
+            </div>
             <input type="tel" id="p-telephone" name="telephone" inputmode="numeric" autocomplete="tel-national" maxlength="10" placeholder="07 00 00 00 00" required>
           </div>
         </div>
@@ -1180,9 +1186,75 @@
     champTel.placeholder = estCI() ? "07 00 00 00 00" : "Numéro sans l'indicatif";
     champTel.value = champTel.value.replace(/\D/g, "").slice(0, max);
   }
-  champIndicatif.addEventListener("change", ajusterTel);
   champTel.addEventListener("input", ajusterTel);
   ajusterTel();
+
+  // Sélecteur d'indicatif à drapeau (liste accessible au clavier : flèches, Entrée, Échap, première lettre)
+  const PAYS = [
+    ["ci", "Côte d'Ivoire", "+225"], ["bf", "Burkina Faso", "+226"], ["ml", "Mali", "+223"], ["gn", "Guinée", "+224"],
+    ["sn", "Sénégal", "+221"], ["gh", "Ghana", "+233"], ["tg", "Togo", "+228"], ["bj", "Bénin", "+229"],
+    ["ne", "Niger", "+227"], ["cm", "Cameroun", "+237"], ["ng", "Nigeria", "+234"], ["ma", "Maroc", "+212"],
+    ["fr", "France", "+33"], ["be", "Belgique", "+32"], ["ch", "Suisse", "+41"], ["gb", "Royaume-Uni", "+44"],
+    ["us", "États-Unis / Canada", "+1"]
+  ];
+  const btnInd = document.getElementById("indicatif-bouton");
+  const listeInd = document.getElementById("indicatif-liste");
+  let indChoisi = 0, indActif = 0;
+  PAYS.forEach(([code, nom, ind], i) => {
+    const li = document.createElement("li");
+    li.id = "pays-" + code; li.setAttribute("role", "option"); li.setAttribute("aria-selected", String(i === 0));
+    const img = document.createElement("img"); img.src = "img/drapeaux/" + code + ".svg"; img.alt = ""; img.width = 28; img.height = 20;
+    const n = document.createElement("span"); n.textContent = nom;
+    const c = document.createElement("span"); c.className = "code"; c.textContent = ind;
+    li.append(img, n, c);
+    li.addEventListener("click", () => choisirPays(i));
+    listeInd.append(li);
+  });
+  const items = [...listeInd.children];
+  function activer(i) {
+    indActif = (i + PAYS.length) % PAYS.length;
+    items.forEach((li, k) => li.classList.toggle("actif", k === indActif));
+    listeInd.setAttribute("aria-activedescendant", items[indActif].id);
+    items[indActif].scrollIntoView({ block: "nearest" });
+  }
+  function ouvrirListe() {
+    listeInd.hidden = false; btnInd.setAttribute("aria-expanded", "true");
+    activer(indChoisi); listeInd.focus();
+  }
+  function fermerListe(retourBouton) {
+    if (listeInd.hidden) return;
+    listeInd.hidden = true; btnInd.setAttribute("aria-expanded", "false");
+    if (retourBouton) btnInd.focus();
+  }
+  function choisirPays(i) {
+    indChoisi = i;
+    const [code, nom, ind] = PAYS[i];
+    champIndicatif.value = ind;
+    btnInd.querySelector("img").src = "img/drapeaux/" + code + ".svg";
+    btnInd.setAttribute("aria-label", "Indicatif : " + nom + ", " + ind);
+    items.forEach((li, k) => li.setAttribute("aria-selected", String(k === i)));
+    ajusterTel();
+    fermerListe(false);
+    champTel.focus();
+  }
+  btnInd.addEventListener("click", () => listeInd.hidden ? ouvrirListe() : fermerListe(true));
+  btnInd.addEventListener("keydown", e => { if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); ouvrirListe(); } });
+  listeInd.addEventListener("keydown", e => {
+    if (e.key === "ArrowDown") { e.preventDefault(); activer(indActif + 1); }
+    else if (e.key === "ArrowUp") { e.preventDefault(); activer(indActif - 1); }
+    else if (e.key === "Home") { e.preventDefault(); activer(0); }
+    else if (e.key === "End") { e.preventDefault(); activer(PAYS.length - 1); }
+    else if (e.key === "Enter" || e.key === " ") { e.preventDefault(); choisirPays(indActif); }
+    else if (e.key === "Escape") { e.preventDefault(); fermerListe(true); }
+    else if (e.key === "Tab") fermerListe(false);
+    else if (e.key.length === 1) {
+      // Saut au premier pays qui commence par la lettre tapée, après le pays actif
+      const l = e.key.toLowerCase();
+      const suite = [...PAYS.keys()].map(k => (indActif + 1 + k) % PAYS.length).find(k => PAYS[k][1].toLowerCase().startsWith(l));
+      if (suite !== undefined) activer(suite);
+    }
+  });
+  document.addEventListener("pointerdown", e => { if (!e.target.closest(".indicatif")) fermerListe(false); });
 
   brancher("form-presence", "retour-presence", f => {
     const nom = f.nom.value.trim();
