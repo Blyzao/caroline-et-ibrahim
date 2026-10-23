@@ -127,6 +127,8 @@ Ne sont **pas** couverts par cette licence :
   pour ce mariage, tous droits réservés. Ne les réutilisez pas sans l'accord des mariés.
 - **La musique** (`musique/musique.mp3`) : *A Thousand Years* de Christina Perri, œuvre protégée
   appartenant à ses ayants droit. Remplacez-la par une musique libre de droits si vous réutilisez ce site.
+- **Les logos des opérateurs** (`img/operateurs/`) : marques de Wave, Orange et MTN, utilisées seulement pour indiquer
+  le moyen de paiement. Wave vient de son site officiel ; Orange Money et MTN de Wikimedia Commons (domaine public).
 - **Les drapeaux** (`img/drapeaux/`) : fournis par [flagcdn.com](https://flagcdn.com), domaine public.
 - **Les polices** Bodoni Moda, Cormorant Garamond, Pinyon Script et Jost : Google Fonts, sous licence SIL Open Font.
 

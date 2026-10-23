@@ -535,10 +535,14 @@
     font-family: var(--sans); font-weight: 500; font-size: .66rem; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap;
     color: #fff; background: var(--bordeaux); border-radius: 999px; padding: 5px 11px; text-align: center;
   }
-  .wave .marque.wave { background: #1dc3f5; }
-  .wave .marque.orange { background: #ff7900; }
-  .wave .marque.mtn { background: #ffcb05; color: #1d1d1b; }
   .wave .marque.moov { background: #0066b3; }
+  /* Logos : même emplacement pour tous, quelle que soit leur forme */
+  .wave .logo { width: 92px; height: 40px; display: flex; align-items: center; justify-content: flex-start; }
+  .wave .logo img { max-width: 100%; max-height: 100%; display: block; }
+  .wave .logo.wave img { width: 40px; height: 40px; border-radius: 10px; }
+  .wave .logo.mtn { width: auto; height: 40px; padding: 7px 10px; border-radius: 10px; background: #ffcb05; }
+  .wave .logo.mtn img { height: 26px; }
+  .wave .logo.orange img { height: 28px; }
   .wave .numero { font-family: var(--affiche); color: var(--bordeaux); font-size: clamp(1.02rem, 4.6vw, 1.35rem); letter-spacing: .02em; white-space: nowrap; }
   .wave .copier { padding: 8px 14px; font-size: .64rem; letter-spacing: .12em; }
   .wave .titulaire { grid-column: 1 / -1; font-size: .95rem; color: var(--texte-doux); margin: 0; }
@@ -547,7 +551,7 @@
   .wave .etapes { margin: 10px auto 0; padding-left: 1.3em; text-align: left; font-size: 1rem; line-height: 1.55; max-width: 340px; }
   @media (max-width: 380px) {
     .wave .compte { grid-template-columns: 1fr auto; }
-    .wave .marque { grid-column: 1 / -1; justify-self: start; }
+    .wave .marque, .wave .logo { grid-column: 1 / -1; justify-self: start; }
   }
   .wave .bientot { font-style: italic; color: var(--texte-doux); }
 
@@ -1171,8 +1175,15 @@
     const zone = document.getElementById("wave");
     const comptes = REGLAGES.cadeau.filter(c => c.numero);
     const el = (tag, cls, txt) => { const n = document.createElement(tag); if (cls) n.className = cls; if (txt) n.textContent = txt; return n; };
-    // Couleur de chaque opérateur ; un opérateur inconnu prend la couleur du site
-    const COULEURS = { "wave": "wave", "orange money": "orange", "mtn momo": "mtn", "mtn": "mtn", "moov money": "moov", "moov": "moov" };
+    // Logo de chaque opérateur ; sans logo (Moov, opérateur inconnu), une étiquette de couleur à son nom
+    const OPERATEURS = {
+      "wave": { classe: "wave", logo: "img/operateurs/wave.png" },
+      "orange money": { classe: "orange", logo: "img/operateurs/orange-money.svg" },
+      "mtn momo": { classe: "mtn", logo: "img/operateurs/mtn.svg" },
+      "mtn": { classe: "mtn", logo: "img/operateurs/mtn.svg" },
+      "moov money": { classe: "moov" },
+      "moov": { classe: "moov" }
+    };
 
     // Contenu de la carte, construit sans innerHTML : rien de ce qui est affiché n'est interprété comme du code
     if (!comptes.length) {
@@ -1184,7 +1195,15 @@
         const chiffres = numero.replace(/\D/g, "");
         // « 0700000000 » s'affiche « 07 00 00 00 00 »
         const lisible = chiffres.replace(/(\d{2})(?=\d)/g, "$1 ");
-        const marque = el("span", "marque " + (COULEURS[operateur.toLowerCase()] || ""), operateur);
+        const op = OPERATEURS[operateur.toLowerCase()] || {};
+        let marque;
+        if (op.logo) {
+          marque = el("span", "logo " + op.classe);
+          const img = el("img"); img.src = op.logo; img.alt = operateur;
+          marque.append(img);
+        } else {
+          marque = el("span", "marque " + (op.classe || ""), operateur);
+        }
         const num = el("span", "numero", lisible);
         const btn = el("button", "bouton contour copier", "Copier");
         btn.type = "button";
